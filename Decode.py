@@ -13,8 +13,10 @@ class Decode:
         self.max_of_operations = np.max(quant_operations_per_jobs)
 
     #https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.barh.html
-    def draw_gatt(self, start_time, end_time):
+    def draw_gatt(self, start_time, end_time, fig):
         colors = {0:'red', 1:'blue', 2:'yellow', 3:'orange', 4:'green'}
+
+        ax = fig.add_subplot(1, 2, 2)
 
         # i = Machine_index ; j = Operation_index
         for i in range( self.quant_of_machines ): # Vai de linha em linha do plot (começando do 0)
@@ -31,14 +33,13 @@ class Decode:
                     #bar_str = operation[0] # Somente o numero do Job
                     bar_str = operation     # Numero do Job e da Operação
 
-                    plt.barh(y=i, width=bar_width, height=0.5, left=bar_left, color=bar_color, edgecolor='black')
-                    plt.text(x=bar_left + 0.1, y=i, s=bar_str, fontsize=8)
+                    ax.barh(y=i, width=bar_width, height=0.5, left=bar_left, color=bar_color, edgecolor='black')
+                    ax.text(x=bar_left + 0.1, y=i, s=bar_str, fontsize=8)
 
-        plt.yticks(np.arange(i + 1), np.arange(1, i + 2))
+        #ax.yticks(np.arange(i + 1), np.arange(1, i + 2))
 
         #self.save_plot_image(plt)
-        plt.show()
-        plt.close()
+    #
 
     # Função para salvar a image de um plot em um arquivo
     def save_plot_image(self, plt):
@@ -72,7 +73,7 @@ class Decode:
     #
 
     # Decode a Scheduling and return the Fitness
-    def decode(self, scheduling, plot_scheduling=False):
+    def decode(self, scheduling, plot_scheduling=False, fig=None):
         machines_matrix = np.zeros((self.quant_of_jobs, self.max_of_operations), dtype=int)
         times_matrix    = np.zeros((self.quant_of_jobs, self.max_of_operations), dtype=int)
 
@@ -192,7 +193,7 @@ class Decode:
 
         #print(scheduling)
         if plot_scheduling:
-            self.draw_gatt(start_time, end_time)
+            self.draw_gatt(start_time, end_time, fig)
         #
 
         fitness = np.max(end_time)

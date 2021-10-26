@@ -43,6 +43,9 @@ class FJSP():
         self.g_best = None
         self.g_best_fitness = None
 
+        self.fig = plt.figure(figsize=(10, 5))
+        self.fig.suptitle('PSO - FJSP')
+
         self.start_environment()
 
     """ Inicia o ambiente para os testes das diversas soluções """
@@ -92,6 +95,10 @@ class FJSP():
     def execute_algorithmns(self):
         self.execute_pso_base()
         #self.execute_direct_solution()
+
+        self.fig.tight_layout()
+        plt.show()
+        plt.close()
         pass
     #
 
@@ -109,7 +116,7 @@ class FJSP():
 
         """ Define quantas vezes vai ser executado """
         #iterations = self.coeficente_populacional * self.quant_of_machines * self.quant_of_jobs
-        iterations = 5
+        iterations = 1
 
         for iter in range(iterations):
 
@@ -118,7 +125,8 @@ class FJSP():
             # Executa PSO
             PSO_result = PSO_algorithmn.execute()
             finded_solution = self.solution_space[ PSO_result[0], PSO_result[1] ]
-            fitness = self.decode.decode(finded_solution, True)
+
+            fitness = self.decode.decode(finded_solution, True, self.fig)
 
             # Print para debug
             print(f"Rodada {str(iter + 1)} => Melhor fitness: {fitness}")
@@ -143,8 +151,8 @@ class FJSP():
     """ Plot a surface plot of fitness of solution space """
     def plot_solution_space(self):
         #print("Start Plot")
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
+        #fig = plt.figure()
+        ax = self.fig.add_subplot(1,2,1, projection='3d')
 
         xx = np.arange(0, self.population_size)
         yy = np.arange(0, self.population_size)
@@ -155,8 +163,8 @@ class FJSP():
 
         ax.plot_surface(X, Y, Z, cmap=cm.coolwarm, linewidth=0, antialiased=True, rcount=800, ccount=800)
         ax.set_zlabel('Fitness')
-        fig.suptitle('Fitness of Solution Space', fontsize=20)
-        plt.show()
+        #fig.suptitle('Fitness of Solution Space', fontsize=20)
+        #plt.show()
         #print("End Plot")
     #
 #
