@@ -15,8 +15,8 @@ class Decode:
     #https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.barh.html
     def draw_gatt(self, start_time, end_time):
         colors = {0:'red', 1:'blue', 2:'yellow', 3:'orange', 4:'green'}
-        #print(start_time)
-        #print(end_time)
+        print(start_time)
+        print(end_time)
 
         # i = Machine_index ; j = Operation_index
         for i in range( self.quant_of_machines ): # Vai de linha em linha do plot (começando do 0)
@@ -161,10 +161,10 @@ class Decode:
             #
 
             elif machine_operation == 0 and operation_count > 1 :
-                prev_m_num = machines_matrix[os-1][operation_count-2]
-                prev_end_time = end_time[prev_m_num-1][previous_operation_index]
-                current_start_time = prev_end_time
-                current_end_time   = prev_end_time+pro_time
+                prev_m_num          = machines_matrix[os-1][operation_count-2]
+                prev_end_time       = end_time[prev_m_num-1][previous_operation_index]
+                current_start_time  = prev_end_time
+                current_end_time    = prev_end_time + pro_time
             #
 
             elif machine_operation > 0:
@@ -176,6 +176,7 @@ class Decode:
                 else:
                     prev_end_time = end_time[previous_machine_number-1][previous_operation_index]
                     free_start = prev_end_time
+                #
 
                 order_start_time = np.sort(start_time[machine_number-1][end_time[machine_number-1] > 0])
                 order_end_time   = np.sort(end_time  [machine_number-1][end_time[machine_number-1] > 0])
@@ -186,8 +187,12 @@ class Decode:
                         current_end_time   = free_start + pro_time
                         flag = 1
                         break
+                    #
+
                     if order_end_time[index] - free_start >= 0:
                         free_start = order_end_time[index]
+                    #
+                #
 
                 if flag == 0:
                     free_start = max(np.max(end_time[machine_number-1]), prev_end_time)
@@ -196,14 +201,14 @@ class Decode:
                 #
             #
 
-            # Re assign values to arrays
-            machines_matrix[os - 1][operation_count - 1]                 = machine_number
-            times_matrix [os - 1][operation_count - 1]                 = pro_time
+            machine_operation += 1
+
             machine_operations[machine_number - 1]          = machine_operation
             start_time[machine_number - 1][operation_index] = current_start_time
             end_time  [machine_number - 1][operation_index] = current_end_time
+        #
 
-            machine_operation += 1
+
 
         #print(scheduling)
         #print(start_time)
