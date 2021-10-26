@@ -67,35 +67,52 @@ class FJSP():
         self.solution_space_size = self.population_size ** 2
 
         """ Inicia as classes de encode e decode para serem usados no problema """
-        self.encode = Encode(self.solution_space_size, self.process_times, self.quant_operations_per_jobs)
+        self.encode = Encode(self.solution_space_size,       self.process_times, self.quant_operations_per_jobs)
         self.decode = Decode(self.quant_operations_per_jobs, self.process_times)
 
         """ Inicia o espaço de soluções """
-        self.solution_space = self.encode.initialize_solution_space()
+        #self.solution_space = self.encode.initialize_solution_space()
 
         """ Iniciar a população e define o g_best """
+        """
         for _ in range(self.population_size):
             particle = Particle(self.population_size, self.solution_space, self.decode, generate_random=True)
             self.population.append(particle)
 
             if (self.g_best_fitness is None) or (particle.fitness < self.g_best_fitness):
                 self.g_best_fitness = particle.fitness
-                self.g_best         = particle.value
+                self.g_best         = particle.position
             #
         #
+        """
 
-        if IS_TESTE:
-            self.plot_solution_space()
+        sol = np.array([4, 2, 1, 1, 5, 3, 4, 2, 1, 3, 3, 4, 4, 1, 3, 2, 3, 1, 4, 2, 3, 2, 3, 1])
+        self.decode.decode(sol, True)
+
+        print("Stop")
+
+        #if IS_TESTE:
+            #self.plot_solution_space()
     #
 
     """ Executa e salva os resultados dos varios algoritmos """
     def execute_algorithmns(self):
-        self.execute_pso_base()
+        #self.execute_pso_base()
+        #self.execute_direct_solution()
+        pass
+    #
+
+    def execute_direct_solution(self):
+        """ Teste com uma solução direta """
+        """..."""
+        self.decode.decode(self.solution_space[5][5], True)
+        """..."""
+        pass
     #
 
     def execute_pso_base(self):
         """ Inicia a classe do PSO """
-        PSO_algorithmn = PSO(self.population, self.solution_space, self.g_best, self.g_best_fitness)
+        PSO_algorithmn = PSO(self.population, self.solution_space, self.g_best, self.g_best_fitness, self.decode)
 
         """ Define quantas vezes vai ser executado """
         #iterations = self.coeficente_populacional * self.quant_of_machines * self.quant_of_jobs
@@ -106,8 +123,9 @@ class FJSP():
             # Reseta parametros
 
             # Executa PSO
-            tuple_result = PSO_algorithmn.execute()
-            fitness = -1
+            PSO_result = PSO_algorithmn.execute()
+            finded_solution = self.solution_space[ PSO_result[0], PSO_result[1] ]
+            fitness = self.decode.decode(finded_solution, True)
 
             # Print para debug
             print(f"Rodada {str(iter + 1)} => Melhor fitness: {fitness}")

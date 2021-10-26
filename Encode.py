@@ -32,8 +32,8 @@ class Encode:
     """ Method to create a random solution space """
     def generate_solution_space(self):
         """ Inicializa uma lista vazia para o agendamento das maquinas e das operações """
-        machines_scheduling   = np.empty((self.solution_space_size, self.half_of_scheduling), dtype=int)
-        operations_scheduling = np.empty((self.solution_space_size, self.half_of_scheduling), dtype=int)
+        machines_scheduling   = np.zeros((self.solution_space_size, self.half_of_scheduling), dtype=int)
+        operations_scheduling = np.zeros((self.solution_space_size, self.half_of_scheduling), dtype=int)
 
         """ Faz uma shallow copy da lista de operações """
         operations = np.copy(self.ordened_operations())
@@ -93,7 +93,7 @@ class Encode:
                 np.delete(jobs_list, job_num)
             #
 
-            print()
+            #print()
         #
 
         solution_space = np.hstack((machines_scheduling, operations_scheduling))

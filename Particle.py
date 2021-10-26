@@ -34,7 +34,7 @@ class Particle:
         self.direction = Positions(random.choice(range(1,9)))
         self.velocity = random.choice(range(1, 9))
         self.evaluate_value(solution_space, decoder)
-        self.p_best = self.value
+        self.p_best = self.position
     #
 
     """
@@ -56,7 +56,7 @@ class Particle:
 
         if (self.p_best_fitness is None) or (fitness < self.p_best_fitness):
             self.p_best_fitness = fitness
-            self.p_best = self.value
+            self.p_best = self.position
     #
 
 class Positions(Enum):

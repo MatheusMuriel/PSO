@@ -14,7 +14,9 @@ class Decode:
 
     #https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.barh.html
     def draw_gatt(self, start_time, end_time):
-        colors = {1:'red', 2:'blue', 3:'yellow', 4:'orange', 5:'green'}
+        colors = {0:'red', 1:'blue', 2:'yellow', 3:'orange', 4:'green'}
+        #print(start_time)
+        #print(end_time)
 
         # i = Machine_index ; j = Operation_index
         for i in range( self.quant_of_machines ): # Vai de linha em linha do plot (começando do 0)
@@ -22,17 +24,37 @@ class Decode:
                 current_start_time      = start_time[i][j]
                 current_end_time        = end_time[i][j]
                 current_diference_time  = current_end_time - current_start_time
-                if current_diference_time > 0:
+                #if current_diference_time > 0:
+                if end_time[i][j] != 0 and end_time[i][j] - start_time[i][j] != 0:
                     operation = self.find_machine_of_a_operation(j)
                     bar_width = current_diference_time
                     bar_left = current_start_time
                     bar_color = colors[operation[0] - 1]
-                    bar_str = operation
+                    #bar_color = colors[operation[0]]
+                    bar_str = operation[0]
 
-                    plt.barh(y=i+1, width=bar_width, height=0.5, left=bar_left, color=bar_color, edgecolor='black')
-                    plt.text(x=bar_left+0.1, y=i+1, s=bar_str, fontsize=8)
+                    plt.barh(y=i, width=bar_width, height=0.5, left=bar_left, color=bar_color, edgecolor='black')
+                    plt.text(x=bar_left + 0.1, y=i, s=bar_str, fontsize=8)
+                    """plt.barh(
+                        i,
+                        width=end_time[i][j] - start_time[i][j],
+                        height=0.5,
+                        left=start_time[i][j],
+                        color=colors[int(self.find_machine_of_a_operation(j)[0])],
+                        edgecolor='black'
+                    )
+                    plt.text(
+                        x=start_time[i][j] + 0.1,
+                        y=i,
+                        s=(
+                            int(self.find_machine_of_a_operation(j)[0]),
+                            int(self.find_machine_of_a_operation(j)[1])),
+                        fontsize=8
+                    )"""
 
-        self.save_plot_image(plt)
+        plt.yticks(np.arange(i + 1), np.arange(1, i + 2))
+
+        #self.save_plot_image(plt)
         plt.show()
         plt.close()
 
@@ -58,43 +80,47 @@ class Decode:
         return op_index
 
     # Dado o índice de uma operação, descobre qual em qual maquina está
+    """ retorna uma tupla (maquina, operação) """
     def find_machine_of_a_operation(self, operation_index):
         job_op_list = [
             (i + 1, j + 1) for i in range( self.quant_of_jobs ) for j in range(self.quant_operations_per_jobs[i])
         ]
         job_op = job_op_list[operation_index]
         return job_op
-        #
+    #
 
     # Decode a Scheduling and return the Fitness
     def decode(self, scheduling, plot_scheduling=False):
-        Jm = np.zeros((self.quant_of_jobs, self.max_of_operations), dtype=int)
-        T  = np.zeros((self.quant_of_jobs, self.max_of_operations), dtype=int)
+        machines_matrix = np.zeros((self.quant_of_jobs, self.max_of_operations), dtype=int)
+        times_matrix    = np.zeros((self.quant_of_jobs, self.max_of_operations), dtype=int)
 
-        MS=scheduling[:self.half_of_scheduling]
-        OS=scheduling[self.half_of_scheduling:]
+        machines_scheduling   = scheduling[:self.half_of_scheduling]
+        operations_scheduling = scheduling[self.half_of_scheduling:]
 
-        p_index = 0
+        operation_index = 0
         for i in range( self.quant_of_jobs ):
             for j in range( self.quant_operations_per_jobs[i] ):
                 count = 0
-                process_time = self.process_times[p_index]
+                process_time = self.process_times[operation_index]
 
                 # Todo for-each with index
                 for index in range( len(process_time) ):
                     if process_time[index] != -1:
                         count+=1
 
-                    if count == MS[p_index]:
-                        Jm[i][j] = index+1
-                        T[i][j]  = process_time[index]
+                    if count == machines_scheduling[operation_index]:
+                        machines_matrix[i][j] = index+1
+                        times_matrix[i][j]  = process_time[index]
                         break
 
                 # Todo Remove
-                #if count < MS[p_index]:
+                #if count < machine_scheduling[operation_index]:
                 #    print("false")
 
-                p_index+=1
+                operation_index+=1
+
+        #print(machines_matrix)
+        #print(times_matrix)
 
         start_time = np.zeros(
             (self.quant_of_machines, self.half_of_scheduling),
@@ -108,34 +134,38 @@ class Decode:
 
         op_count_dict = {}
         machine_operations = np.zeros(self.quant_of_machines, dtype=int)
-        for os in OS:
 
+        for os in operations_scheduling:
             if os in op_count_dict:
                 op_count_dict[os] += 1
             else:
                 op_count_dict[os] = 1
+            #
 
             operation_count = op_count_dict[os]
             operation_index = self.find_one_operation_in_a_machine(os, operation_count)
 
-            machine_number     = Jm[os-1][operation_count-1]
-            pro_time           = T [os-1][operation_count-1]
+            machine_number     = machines_matrix[os-1][operation_count-1]
+            pro_time           = times_matrix [os-1][operation_count-1]
+
             machine_operation  = machine_operations[machine_number-1]
             current_start_time = start_time[machine_number-1][operation_index]
             current_end_time   = end_time  [machine_number-1][operation_index]
 
             previous_operation_index = self.find_one_operation_in_a_machine(os, operation_count - 1)
-            previous_machine_number = Jm[os-1][operation_count-2]
+            previous_machine_number = machines_matrix[os-1][operation_count-2]
 
             if machine_operation == 0 and operation_count == 1 :
                 current_start_time = 0
                 current_end_time   = pro_time
+            #
 
             elif machine_operation == 0 and operation_count > 1 :
-                prev_m_num = Jm[os-1][operation_count-2]
+                prev_m_num = machines_matrix[os-1][operation_count-2]
                 prev_end_time = end_time[prev_m_num-1][previous_operation_index]
                 current_start_time = prev_end_time
                 current_end_time   = prev_end_time+pro_time
+            #
 
             elif machine_operation > 0:
                 flag=0
@@ -163,19 +193,26 @@ class Decode:
                     free_start = max(np.max(end_time[machine_number-1]), prev_end_time)
                     current_start_time = free_start
                     current_end_time   = free_start + pro_time
+                #
+            #
 
             # Re assign values to arrays
-            Jm[os - 1][operation_count - 1]                 = machine_number
-            T [os - 1][operation_count - 1]                 = pro_time
+            machines_matrix[os - 1][operation_count - 1]                 = machine_number
+            times_matrix [os - 1][operation_count - 1]                 = pro_time
             machine_operations[machine_number - 1]          = machine_operation
             start_time[machine_number - 1][operation_index] = current_start_time
             end_time  [machine_number - 1][operation_index] = current_end_time
 
             machine_operation += 1
 
+        #print(scheduling)
+        #print(start_time)
+        #print(end_time)
         if plot_scheduling:
             self.draw_gatt(start_time, end_time)
+        #
 
         fitness = np.max(end_time)
 
         return fitness
+    #
