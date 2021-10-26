@@ -71,7 +71,7 @@ class FJSP():
         self.decode = Decode(self.quant_operations_per_jobs, self.process_times)
 
         """ Inicia o espaço de soluções """
-        #self.solution_space = self.encode.initialize_solution_space()
+        self.solution_space = self.encode.initialize_solution_space()
 
         """ Iniciar a população e define o g_best """
         """
@@ -86,7 +86,7 @@ class FJSP():
         #
         """
 
-        sol = np.array([4, 2, 1, 1, 5, 3, 4, 2, 1, 3, 3, 4, 4, 1, 3, 2, 3, 1, 4, 2, 3, 2, 3, 1])
+        sol = self.solution_space[0,0]
         self.decode.decode(sol, True)
 
         print("Stop")

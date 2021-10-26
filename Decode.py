@@ -15,8 +15,6 @@ class Decode:
     #https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.barh.html
     def draw_gatt(self, start_time, end_time):
         colors = {0:'red', 1:'blue', 2:'yellow', 3:'orange', 4:'green'}
-        print(start_time)
-        print(end_time)
 
         # i = Machine_index ; j = Operation_index
         for i in range( self.quant_of_machines ): # Vai de linha em linha do plot (começando do 0)
@@ -30,27 +28,11 @@ class Decode:
                     bar_width = current_diference_time
                     bar_left = current_start_time
                     bar_color = colors[operation[0] - 1]
-                    #bar_color = colors[operation[0]]
-                    bar_str = operation[0]
+                    #bar_str = operation[0] # Somente o numero do Job
+                    bar_str = operation     # Numero do Job e da Operação
 
                     plt.barh(y=i, width=bar_width, height=0.5, left=bar_left, color=bar_color, edgecolor='black')
                     plt.text(x=bar_left + 0.1, y=i, s=bar_str, fontsize=8)
-                    """plt.barh(
-                        i,
-                        width=end_time[i][j] - start_time[i][j],
-                        height=0.5,
-                        left=start_time[i][j],
-                        color=colors[int(self.find_machine_of_a_operation(j)[0])],
-                        edgecolor='black'
-                    )
-                    plt.text(
-                        x=start_time[i][j] + 0.1,
-                        y=i,
-                        s=(
-                            int(self.find_machine_of_a_operation(j)[0]),
-                            int(self.find_machine_of_a_operation(j)[1])),
-                        fontsize=8
-                    )"""
 
         plt.yticks(np.arange(i + 1), np.arange(1, i + 2))
 
@@ -208,11 +190,7 @@ class Decode:
             end_time  [machine_number - 1][operation_index] = current_end_time
         #
 
-
-
-        #print(scheduling)
-        #print(start_time)
-        #print(end_time)
+        print(scheduling)
         if plot_scheduling:
             self.draw_gatt(start_time, end_time)
         #
