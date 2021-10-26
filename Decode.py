@@ -190,7 +190,7 @@ class Decode:
             end_time  [machine_number - 1][operation_index] = current_end_time
         #
 
-        print(scheduling)
+        #print(scheduling)
         if plot_scheduling:
             self.draw_gatt(start_time, end_time)
         #

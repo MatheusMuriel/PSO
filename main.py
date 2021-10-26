@@ -74,7 +74,6 @@ class FJSP():
         self.solution_space = self.encode.initialize_solution_space()
 
         """ Iniciar a população e define o g_best """
-        """
         for _ in range(self.population_size):
             particle = Particle(self.population_size, self.solution_space, self.decode, generate_random=True)
             self.population.append(particle)
@@ -84,20 +83,14 @@ class FJSP():
                 self.g_best         = particle.position
             #
         #
-        """
 
-        sol = self.solution_space[0,0]
-        self.decode.decode(sol, True)
-
-        print("Stop")
-
-        #if IS_TESTE:
-            #self.plot_solution_space()
+        if IS_TESTE:
+            self.plot_solution_space()
     #
 
     """ Executa e salva os resultados dos varios algoritmos """
     def execute_algorithmns(self):
-        #self.execute_pso_base()
+        self.execute_pso_base()
         #self.execute_direct_solution()
         pass
     #
@@ -105,7 +98,7 @@ class FJSP():
     def execute_direct_solution(self):
         """ Teste com uma solução direta """
         """..."""
-        self.decode.decode(self.solution_space[5][5], True)
+        self.decode.decode(self.solution_space[4, 4], True)
         """..."""
         pass
     #
