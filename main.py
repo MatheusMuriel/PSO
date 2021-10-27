@@ -95,11 +95,6 @@ class FJSP():
     def execute_algorithmns(self):
         self.execute_pso_base()
         #self.execute_direct_solution()
-
-        self.fig.tight_layout()
-        plt.show()
-        plt.close()
-        pass
     #
 
     def execute_direct_solution(self):
@@ -167,6 +162,12 @@ class FJSP():
         #plt.show()
         #print("End Plot")
     #
+
+    def finalize_plot(self):
+        self.fig.tight_layout()
+        plt.show()
+        plt.close()
+    #
 #
 
 if __name__ == '__main__':
@@ -174,6 +175,7 @@ if __name__ == '__main__':
 
     FJSP = FJSP()
     FJSP.execute_algorithmns()
+    FJSP.finalize_plot()
 
     """interations = 1
     for i in range(interations):

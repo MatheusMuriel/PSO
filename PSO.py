@@ -28,7 +28,12 @@ class PSO:
         for _ in range(0,1):
             # Avalia a população antes ou dps do evaluete?
             for particula in self.population:
-                #print(particula)
+                """======================"""
+                print(particula.position)
+                particula.update_position(self.g_best)
+                print(particula.position)
+                """======================"""
+
                 particula.evaluate_value(self.solution_space, self.decoder)
 
                 # Atualização do g_best
