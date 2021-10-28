@@ -25,27 +25,25 @@ class PSO:
         #print("Inicio da iteração do PSO")
         positions_history = []
         #while self.stop_condition():
-        for _ in range(0,10):
-            positions = [p.position for p in self.population]
-            positions_history.append(positions)
-            print("STOP!")
+        for _ in range(0, 10):
+            positions_history.append([p.position for p in self.population])
 
-            # Avalia a população antes ou dps do evaluete?
             for particula in self.population:
-                """======================"""
-                #print(particula.position)
+
+                """ Atualiza a posisão do particula """
                 particula.update_position(self.g_best)
-                #print(particula.position)
-                """======================"""
 
-                #particula.evaluate_value(self.solution_space, self.decoder)
+                """ Atualiza o seu fitness e seu p_best """
+                particula.evaluate_value(self.solution_space, self.decoder)
 
-                # Atualização do g_best
-                #if particula.fitness < self.g_best_fitness:
-                    #self.g_best = particula.position
-                    #self.g_best_fitness = particula.fitness
-
-            #print("A")
+                """ Caso seja melhor, atualiza o g_best """
+                if particula.fitness < self.g_best_fitness:
+                    self.g_best = particula.position
+                    self.g_best_fitness = particula.fitness
+                #
+            #
+        #
+        positions_history.append([p.position for p in self.population])
 
         #print("Fim da iteração do PSO")
 

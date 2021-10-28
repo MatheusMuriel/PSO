@@ -67,7 +67,7 @@ class Particle:
         down_right_movement = lambda x, y, v: down_movement(*right_movement(x, y, v))
 
 
-        """ Direciona para qual movimento vais er executado """
+        """ Direciona para qual movimento vai ser executado """
         if direction == Positions.UP:
             new_position = up_movement(x_position, y_position, velocity)
         elif direction == Positions.DOWN:
@@ -97,7 +97,7 @@ class Particle:
 
         """ Deduz a possição inicial para ele setar o calculo com base no zero do vetor """
         """ E então soma a innercia e obtem a posição final """
-        final_vector = (median_best_vector - innitial_vector) + inertia_vector
+        final_vector = (median_best_vector - innitial_vector) + (inertia_vector /2)
 
         print("Stop!")
 
@@ -121,7 +121,7 @@ class Particle:
                 new_y_position = self.solution_space_limit - 1
             #
 
-            self.position = (new_x_position, new_y_position)
+            self.position = [int(new_x_position), int(new_y_position)]
 
         pass
     #

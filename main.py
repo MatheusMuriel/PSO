@@ -15,7 +15,7 @@ from matplotlib import cm
 """ Hyperparans for solutions """
 hyper_params = {
     "coeficente_populacional": 5,
-    "population_size" : 10
+    "population_size" : 30
 }
 
 IS_TESTE = False
@@ -38,7 +38,7 @@ class FJSP():
         self.decode = None
 
         self.coeficente_populacional = hyper_params["coeficente_populacional"]
-        self.population_size         = hyper_params["coeficente_populacional"]
+        self.population_size         = hyper_params["population_size"]
         self.population = []
         self.g_best = None
         self.g_best_fitness = None
