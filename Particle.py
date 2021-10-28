@@ -55,46 +55,6 @@ class Particle:
         x_position = self.position[0]
         y_position = self.position[1]
         velocity = self.velocity
-        direction = self.direction
-
-        # Todo - Por a declaração disso em outro lugar
-        """
-        Lambdas functions que definem a logica de movimentos na matrix 2d
-        x: x position
-        y: y position
-        v: velocidade de movimento
-        "*" é um operador que faz o unpack da tupla para parametros de função
-        """
-        up_movement         = lambda x, y, v: (x, y-v, v)
-        down_movement       = lambda x, y, v: (x, y+v, v)
-        left_movement       = lambda x, y, v: (x-v, y, v)
-        right_movement      = lambda x, y, v: (x+v, y, v)
-        up_left_movement    = lambda x, y, v: up_movement(*left_movement(x, y, v))
-        up_right_movement   = lambda x, y, v: up_movement(*right_movement(x, y, v))
-        down_left_movement  = lambda x, y, v: down_movement(*left_movement(x, y, v))
-        down_right_movement = lambda x, y, v: down_movement(*right_movement(x, y, v))
-
-
-        """ Direciona para qual movimento vai ser executado """
-        """
-        if direction == Positions.UP:
-            new_position = up_movement(x_position, y_position, velocity)
-        elif direction == Positions.DOWN:
-            new_position = down_movement(x_position, y_position, velocity)
-        elif direction == Positions.LEFT:
-            new_position = left_movement(x_position, y_position, velocity)
-        elif direction == Positions.RIGHT:
-            new_position = right_movement(x_position, y_position, velocity)
-        elif direction == Positions.UP_LEFT:
-            new_position = up_left_movement(x_position, y_position, velocity)
-        elif direction == Positions.UP_RIGHT:
-            new_position = up_right_movement(x_position, y_position, velocity)
-        elif direction == Positions.DOWN_LEFT:
-            new_position = down_left_movement(x_position, y_position, velocity)
-        elif direction == Positions.DOWN_RIGHT:
-            new_position = down_right_movement(x_position, y_position, velocity)
-        #
-        """
 
         print("Stop!")
 
@@ -149,13 +109,3 @@ class Particle:
             self.p_best_fitness = fitness
             self.p_best = self.position
     #
-
-class Positions(Enum):
-    UP = 1
-    DOWN = 2
-    LEFT = 3
-    RIGHT = 4
-    UP_LEFT = 5
-    UP_RIGHT = 6
-    DOWN_LEFT = 7
-    DOWN_RIGHT = 8
