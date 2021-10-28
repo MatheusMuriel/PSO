@@ -21,6 +21,7 @@ class Particle:
         self.p_best_fitness = None
         self.value = None
         self.fitness = None
+        self.last_position = None
         self.solution_space_size = solution_space_size
         self.solution_space_limit = solution_space.shape[0]
 
@@ -32,9 +33,16 @@ class Particle:
     Preenche a particula com valores aleatorios
     """
     def fill_with_random_values(self, solution_space_limit, solution_space, decoder):
-        self.position = random.sample(range(0,solution_space_limit), 2)
-        self.direction = Positions(random.choice(range(1,9)))
-        self.velocity = random.choice(range(1, 9))
+        """ Começa em 1 e deduz 1 do limite para ele não ir parar nas bordas e não conseguir movimentar """
+        self.position = np.array(random.sample(range(1, solution_space_limit - 1), 2))
+
+        """ Sorteia aleatoriamente uma possição anterior """
+        """ Se for '+1' vai criar um vetor de movimento para a frente """
+        """ Se for '-1' vai criar um vetor de movimento para a traz """
+        self.last_position = self.position + 1 if random.choice([True, False]) else self.position - 1
+
+        self.velocity = random.uniform(1.0, 2.0) # Todo - jogar no hyper parametro
+
         self.evaluate_value(solution_space, decoder)
         self.p_best = self.position
     #
@@ -68,6 +76,7 @@ class Particle:
 
 
         """ Direciona para qual movimento vai ser executado """
+        """
         if direction == Positions.UP:
             new_position = up_movement(x_position, y_position, velocity)
         elif direction == Positions.DOWN:
@@ -85,23 +94,25 @@ class Particle:
         elif direction == Positions.DOWN_RIGHT:
             new_position = down_right_movement(x_position, y_position, velocity)
         #
+        """
 
         print("Stop!")
 
-        innitial_vector = np.array([x_position,      y_position      ])
-        inertia_vector  = np.array([new_position[0], new_position[1] ])
         p_best_vector   = np.array([self.p_best[0],  self.p_best[1]  ])
         g_best_vector   = np.array([g_best[0],       g_best[1]       ])
 
         median_best_vector = ((p_best_vector + g_best_vector)/2)
 
+        innitial_position = np.array([x_position, y_position])
+        inertia_vector = (innitial_position * velocity)
+
         """ Deduz a possição inicial para ele setar o calculo com base no zero do vetor """
         """ E então soma a innercia e obtem a posição final """
-        final_vector = (median_best_vector - innitial_vector) + (inertia_vector /2)
+        final_vector = (median_best_vector - innitial_position) + (inertia_vector /2)
 
         print("Stop!")
 
-        if new_position is not None:
+        if final_vector is not None:
             new_x_position = final_vector[0]
             new_y_position = final_vector[1]
 
