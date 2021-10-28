@@ -13,7 +13,7 @@ class Particle:
     Inicia a entidade da particula
     Caso generate_random seja True, chama o preenchedor de valores aleatorios
     """
-    def __init__(self, limit_of_solution_space, solution_space, decoder, generate_random = False):
+    def __init__(self, solution_space_size, solution_space, decoder, generate_random = False):
         self.position = None
         self.velocity = None
         self.direction = None
@@ -21,17 +21,18 @@ class Particle:
         self.p_best_fitness = None
         self.value = None
         self.fitness = None
-        self.limit_of_solution_space = limit_of_solution_space
+        self.solution_space_size = solution_space_size
+        self.solution_space_limit = solution_space.shape[0]
 
         if generate_random:
-            self.fill_with_random_values(limit_of_solution_space, solution_space, decoder)
+            self.fill_with_random_values(self.solution_space_limit, solution_space, decoder)
     #
 
     """
     Preenche a particula com valores aleatorios
     """
-    def fill_with_random_values(self, limit_of_solution_space, solution_space, decoder):
-        self.position = random.sample(range(0,limit_of_solution_space), 2)
+    def fill_with_random_values(self, solution_space_limit, solution_space, decoder):
+        self.position = random.sample(range(0,solution_space_limit), 2)
         self.direction = Positions(random.choice(range(1,9)))
         self.velocity = random.choice(range(1, 9))
         self.evaluate_value(solution_space, decoder)
@@ -85,9 +86,24 @@ class Particle:
             new_position = down_right_movement(x_position, y_position, velocity)
         #
 
+        print("Stop!")
+
+        innitial_vector = np.array([x_position,      y_position      ])
+        inertia_vector  = np.array([new_position[0], new_position[1] ])
+        p_best_vector   = np.array([self.p_best[0],  self.p_best[1]  ])
+        g_best_vector   = np.array([g_best[0],       g_best[1]       ])
+
+        median_best_vector = ((p_best_vector + g_best_vector)/2)
+
+        """ Deduz a possição inicial para ele setar o calculo com base no zero do vetor """
+        """ E então soma a innercia e obtem a posição final """
+        final_vector = (median_best_vector - innitial_vector) + inertia_vector
+
+        print("Stop!")
+
         if new_position is not None:
-            new_x_position = new_position[0]
-            new_y_position = new_position[1]
+            new_x_position = final_vector[0]
+            new_y_position = final_vector[1]
 
             """ Validações para caso seja numero negativo (tenha ido para fora do mapa) """
             if new_x_position < 0:
@@ -98,11 +114,11 @@ class Particle:
             #
 
             """ Validação para caso seja maior que o limite matrix (tenha ido para fora do mapa) """
-            if new_x_position >= self.limit_of_solution_space:
-                new_x_position = self.limit_of_solution_space - 1
+            if new_x_position >= self.solution_space_limit:
+                new_x_position = self.solution_space_limit - 1
             #
-            if new_y_position >= self.limit_of_solution_space:
-                new_y_position = self.limit_of_solution_space - 1
+            if new_y_position >= self.solution_space_limit:
+                new_y_position = self.solution_space_limit - 1
             #
 
             self.position = (new_x_position, new_y_position)

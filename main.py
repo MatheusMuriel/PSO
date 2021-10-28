@@ -18,7 +18,7 @@ hyper_params = {
     "population_size" : 10
 }
 
-IS_TESTE = True
+IS_TESTE = False
 
 class FJSP():
 
@@ -43,8 +43,8 @@ class FJSP():
         self.g_best = None
         self.g_best_fitness = None
 
-        self.fig = plt.figure(figsize=(10, 5))
-        self.fig.suptitle('PSO - FJSP')
+        #self.fig = plt.figure(figsize=(10, 5))
+        #self.fig.suptitle('PSO - FJSP')
 
         self.start_environment()
 
@@ -67,7 +67,8 @@ class FJSP():
         self.quant_of_machines      = self.process_times.shape[1]
 
         """ Calcula o tamanho do espaço de soluçoes """
-        self.solution_space_size = self.population_size ** 2
+        #self.solution_space_size = self.population_size ** 2
+        self.solution_space_size = 900
 
         """ Inicia as classes de encode e decode para serem usados no problema """
         self.encode = Encode(self.solution_space_size,       self.process_times, self.quant_operations_per_jobs)
@@ -78,7 +79,7 @@ class FJSP():
 
         """ Iniciar a população e define o g_best """
         for _ in range(self.population_size):
-            particle = Particle(self.population_size, self.solution_space, self.decode, generate_random=True)
+            particle = Particle(self.solution_space_size, self.solution_space, self.decode, generate_random=True)
             self.population.append(particle)
 
             if (self.g_best_fitness is None) or (particle.fitness < self.g_best_fitness):
@@ -118,15 +119,24 @@ class FJSP():
             # Reseta parametros
 
             # Executa PSO
-            PSO_result = PSO_algorithmn.execute()
-            finded_solution = self.solution_space[ PSO_result[0], PSO_result[1] ]
-
-            fitness = self.decode.decode(finded_solution, True, self.fig)
+            #PSO_result = PSO_algorithmn.execute()
+            #finded_solution = self.solution_space[ PSO_result[0], PSO_result[1] ]
+            #fitness = self.decode.decode(finded_solution, True, self.fig)
 
             # Print para debug
-            print(f"Rodada {str(iter + 1)} => Melhor fitness: {fitness}")
+            #print(f"Rodada {str(iter + 1)} => Melhor fitness: {fitness}")
 
             # Salva na lista de soluções para analises Futuras
+
+            positions_history = PSO_algorithmn.execute()
+
+            for pos in positions_history:
+                x_coordinates = [x[0] for x in pos]
+                y_coordinates = [x[1] for x in pos]
+                plt.scatter(x_coordinates, y_coordinates)
+                plt.show()
+
+            print("Stop!")
         #
 
         print("STOP!!!")

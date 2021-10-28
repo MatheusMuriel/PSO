@@ -23,29 +23,34 @@ class PSO:
     """
     def execute(self):
         #print("Inicio da iteração do PSO")
-
+        positions_history = []
         #while self.stop_condition():
-        for _ in range(0,1):
+        for _ in range(0,10):
+            positions = [p.position for p in self.population]
+            positions_history.append(positions)
+            print("STOP!")
+
             # Avalia a população antes ou dps do evaluete?
             for particula in self.population:
                 """======================"""
-                print(particula.position)
+                #print(particula.position)
                 particula.update_position(self.g_best)
-                print(particula.position)
+                #print(particula.position)
                 """======================"""
 
-                particula.evaluate_value(self.solution_space, self.decoder)
+                #particula.evaluate_value(self.solution_space, self.decoder)
 
                 # Atualização do g_best
-                if particula.fitness < self.g_best_fitness:
-                    self.g_best = particula.position
-                    self.g_best_fitness = particula.fitness
+                #if particula.fitness < self.g_best_fitness:
+                    #self.g_best = particula.position
+                    #self.g_best_fitness = particula.fitness
 
-
+            #print("A")
 
         #print("Fim da iteração do PSO")
 
-        return self.g_best
+        #return self.g_best
+        return positions_history
     #
 
     """
