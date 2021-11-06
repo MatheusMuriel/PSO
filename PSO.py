@@ -49,6 +49,8 @@ class PSO:
 
         #return self.g_best
         return positions_history
+
+        return (self.g_best, positions_history)
     #
 
     """

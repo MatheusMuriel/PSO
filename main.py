@@ -18,7 +18,7 @@ hyper_params = {
     "population_size" : 30
 }
 
-IS_TESTE = False
+IS_TESTE = True
 
 class FJSP():
 
@@ -43,8 +43,8 @@ class FJSP():
         self.g_best = None
         self.g_best_fitness = None
 
-        #self.fig = plt.figure(figsize=(10, 5))
-        #self.fig.suptitle('PSO - FJSP')
+        self.fig = plt.figure(figsize=(10, 5))
+        self.fig.suptitle('PSO - FJSP')
 
         self.start_environment()
 
@@ -128,7 +128,12 @@ class FJSP():
 
             # Salva na lista de soluções para analises Futuras
 
-            positions_history = PSO_algorithmn.execute()
+            result = PSO_algorithmn.execute()
+            positions_history = result[1]
+            solution = result[0]
+            finded_solution = self.solution_space[solution[0], solution[1]]
+
+            #fitness = self.decode.decode(finded_solution, True, self.fig)
 
             for pos in positions_history:
                 x_coordinates = [x[0] for x in pos]
@@ -156,7 +161,7 @@ class FJSP():
     """ Plot a surface plot of fitness of solution space """
     def plot_solution_space(self):
         #print("Start Plot")
-        #fig = plt.figure()
+        fig = plt.figure()
         ax = self.fig.add_subplot(1,2,1, projection='3d')
 
         xx = np.arange(0, self.population_size)

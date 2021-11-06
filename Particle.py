@@ -2,8 +2,6 @@ import Decode as Decode
 import numpy as np
 import random
 
-from enum import Enum
-
 """
 Classe que representa e gerencia a entidade de uma particula
 """
@@ -16,7 +14,7 @@ class Particle:
     def __init__(self, solution_space_size, solution_space, decoder, generate_random = False):
         self.position = None
         self.velocity = None
-        self.direction = None
+        #self.direction = None
         self.p_best = None
         self.p_best_fitness = None
         self.value = None
