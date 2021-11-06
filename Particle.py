@@ -31,13 +31,18 @@ class Particle:
     Preenche a particula com valores aleatorios
     """
     def fill_with_random_values(self, solution_space_limit, solution_space, decoder):
-        """ Começa em 1 e deduz 1 do limite para ele não ir parar nas bordas e não conseguir movimentar """
-        self.position = np.array(random.sample(range(1, solution_space_limit - 1), 2))
+        """ ... """
+
+        """ Começa em 1 e deduz 1 do limite """
+        """ para ele não ir parar nas bordas e não conseguir movimentar """
+        random_position = np.array(random.sample(range(1, solution_space_limit - 1), 2))
+        """ Converte de array para list para manter o padrão de datatype da solução """
+        self.position = [int(random_position[0]), int(random_position[1])]
 
         """ Sorteia aleatoriamente uma possição anterior """
         """ Se for '+1' vai criar um vetor de movimento para a frente """
         """ Se for '-1' vai criar um vetor de movimento para a traz """
-        self.last_position = self.position + 1 if random.choice([True, False]) else self.position - 1
+        self.last_position = random_position + 1 if random.choice([True, False]) else random_position - 1
 
         self.velocity = random.uniform(1.0, 2.0) # Todo - jogar no hyper parametro
 
@@ -54,7 +59,7 @@ class Particle:
         y_position = self.position[1]
         velocity = self.velocity
 
-        print("Stop!")
+        #print("Stop!")
 
         p_best_vector   = np.array([self.p_best[0],  self.p_best[1]  ])
         g_best_vector   = np.array([g_best[0],       g_best[1]       ])
@@ -68,7 +73,7 @@ class Particle:
         """ E então soma a innercia e obtem a posição final """
         final_vector = (median_best_vector - innitial_position) + (inertia_vector /2)
 
-        print("Stop!")
+        #print("Stop!")
 
         if final_vector is not None:
             new_x_position = final_vector[0]

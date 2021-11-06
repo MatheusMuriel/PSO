@@ -13,7 +13,7 @@ class Decode:
         self.max_of_operations = np.max(quant_operations_per_jobs)
 
     #https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.barh.html
-    def draw_gatt(self, start_time, end_time, fig):
+    def draw_gatt(self, start_time, end_time):
         colors = {0:'red', 1:'blue', 2:'yellow', 3:'orange', 4:'green'}
 
         #ax = fig.add_subplot(1, 2, 2)
@@ -34,10 +34,10 @@ class Decode:
                     #bar_str = operation[0] # Somente o numero do Job
                     bar_str = operation     # Numero do Job e da Operação
 
-                    ax.barh(y=i, width=bar_width, height=0.5, left=bar_left, color=bar_color, edgecolor='black')
-                    ax.text(x=bar_left + 0.1, y=i, s=bar_str, fontsize=8)
+                    plt.barh(y=i, width=bar_width, height=0.5, left=bar_left, color=bar_color, edgecolor='black')
+                    plt.text(x=bar_left + 0.1, y=i, s=bar_str, fontsize=8)
 
-        #ax.yticks(np.arange(i + 1), np.arange(1, i + 2))
+        #plt.yticks(np.arange(i + 1), np.arange(1, i + 2))
 
         #self.save_plot_image(plt)
     #
@@ -194,7 +194,7 @@ class Decode:
 
         #print(scheduling)
         if plot_scheduling:
-            self.draw_gatt(start_time, end_time, fig)
+            self.draw_gatt(start_time, end_time)
         #
 
         fitness = np.max(end_time)

@@ -101,7 +101,7 @@ class FJSP():
     def execute_direct_solution(self):
         """ Teste com uma solução direta """
         """..."""
-        self.decode.decode(self.solution_space[4, 4], True)
+        self.decode.decode(self.solution_space[4, 2], True)
         """..."""
         pass
     #
