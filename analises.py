@@ -281,21 +281,30 @@ class FJSP():
   #
 
   def save_encoder_data(self, encoder):
-    #
+    textfile = open("executions_data/encoder_data.txt", "w")
+    textfile.write("encoder_data = {\n")
+    textfile.write(f"\"solution_space_size\"       : {encoder.solution_space_size},")
+    textfile.write(f"\"process_times\"             : {encoder.process_times},")
+    textfile.write(f"\"quant_operations_per_jobs\" : {encoder.quant_operations_per_jobs},")
+    textfile.write(f"\"quant_of_jobs\"             : {encoder.quant_of_jobs},")
+    textfile.write(f"\"quant_of_machines\"         : {encoder.quant_of_machines},")
+    textfile.write(f"\"half_of_scheduling\"        : {encoder.half_of_scheduling},")
+    textfile.write(f"\"solution_size\"             : {encoder.solution_size}")
+    textfile.write("}")
+    textfile.close()
     pass
   #
 
   def save_decoder_data(self, decoder):
-    """
-      Salvar: quant_of_machines, quant_of_jobs, quant_operations_per_jobs,
-      max_of_operations, half_of_scheduling, process_times
-    """
-
     textfile = open("executions_data/decoder_data.txt", "w")
-
-    textfile.write("solution_space = [\n")
-    textfile.write("]")
-
+    textfile.write("decoder_data = {\n")
+    textfile.write(f"\"quant_of_jobs\":             {decoder.quant_of_jobs},")
+    textfile.write(f"\"quant_of_machines\":         {decoder.quant_of_machines},")
+    textfile.write(f"\"quant_operations_per_jobs\": {decoder.quant_operations_per_jobs},")
+    textfile.write(f"\"max_of_operations\":         {decoder.max_of_operations},")
+    textfile.write(f"\"half_of_scheduling\":        {decoder.half_of_scheduling},")
+    textfile.write(f"\"process_times\":             {decoder.process_times}")
+    textfile.write("}")
     textfile.close()
   #
 
