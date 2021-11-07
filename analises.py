@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import copy
+import os
 
 from Particle import Particle
 from ReadData import Input
@@ -299,9 +300,9 @@ class FJSP():
 #
 
 if __name__ == '__main__':
-  FJSP = FJSP()
-  #FJSP.animated_plot()
-  FJSP.execute_algorithmns()
+  _FJSP = FJSP()
+  #_FJSP.animated_plot()
+  _FJSP.execute_algorithmns()
 
   """interations = 1
   for i in range(interations):
