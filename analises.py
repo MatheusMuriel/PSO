@@ -12,14 +12,16 @@ from matplotlib.ticker import LinearLocator, FormatStrFormatter
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 
+from matplotlib import animation
 """ Hyperparans for solutions """
 hyper_params = {
   "coeficente_populacional": 5,
-  "population_size" : 30
+  "population_size" : 30,
+  "velocity_limit" : 2.0
 }
-
-IS_TESTE = True
-
+IS_TESTE            = True
+PLOT_3D             = True
+ANIMATED_POSITIONS  = True
 class FJSP():
   """ Inicia o ambiente para os testes das diversas soluções """
   def __init__(self):
@@ -49,7 +51,7 @@ class FJSP():
   def start_environment(self):
     """ Pega o arquivo com o problema """
     #file_path = './Data/2_Kacem/Kacem4.fjs'
-    file_path = './Data/1_Brandimarte/BrandimarteMk4.fjs'
+    file_path = './Data/1_Brandimarte/BrandimarteMk1.fjs'
     input = Input(file_path)
     input_matrix_tuple = input.getMatrix()
 
@@ -77,7 +79,7 @@ class FJSP():
 
     """ Iniciar a população e define o g_best """
     for _ in range(self.population_size):
-      particle = Particle(self.solution_space_size, self.solution_space, self.decode, generate_random=True)
+      particle = Particle(self.solution_space_size, self.solution_space, self.decode, hyper_params, generate_random=True)
       self.population.append(particle)
 
       if (self.g_best_fitness is None) or (particle.fitness < self.g_best_fitness):
@@ -97,8 +99,6 @@ class FJSP():
 
   """ Teste com uma solução direta """
   def execute_direct_solution(self):
-    #self.decode.decode(self.solution_space[4, 2], True)
-
     positions_history = []
     for _ in range(0, 10):
       """ Salva a posição """
@@ -127,26 +127,28 @@ class FJSP():
       pass
     #
 
-    for pos in positions_history:
-      x_coordinates = [x[0] for x in pos]
-      y_coordinates = [x[1] for x in pos]
-      plt.scatter(x_coordinates, y_coordinates)
-      plt.show()
+    if not PLOT_3D:
+      for pos in positions_history:
+        x_coordinates = [x[0] for x in pos]
+        y_coordinates = [x[1] for x in pos]
+        plt.scatter(x_coordinates, y_coordinates)
+        plt.show()
+    #
 
-    #print("Fim da iteração do PSO")
+    if ANIMATED_POSITIONS:
+      self.animated_plot(positions_history)
+    #
 
     self.save_list(positions_history)
-
-    #return self.g_best
     return positions_history
-
-    #return (self.g_best, positions_history)
-    """..."""
-    pass
   #
 
   """ Plot a surface plot of fitness of solution space """
   def plot_solution_space(self):
+    if PLOT_3D:
+      import matplotlib;
+      matplotlib.use("TkAgg")
+
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
 
@@ -166,28 +168,18 @@ class FJSP():
   def animated_plot(self, hist):
     import matplotlib;
     matplotlib.use("TkAgg")
-    import numpy as np
-    import matplotlib.pyplot as plt
-    import matplotlib.animation as animation
-
+    def update(i):
+      scat.set_offsets(hist[i])
+      scat.set_array(colors)
+      return scat,
+    colors = np.ones(len(hist[0]))
+    colors[len(colors) - 1] = 3
     fig, ax = plt.subplots()
-
-    x = np.arange(0, 2 * np.pi, 0.01)
-    line, = ax.plot(x, np.sin(x))
-
-    def animate(i):
-      line.set_ydata(np.sin(x + i / 10.0))
-      return line,
-
-    # Init only required for blitting to give a clean slate.
-    def init():
-      line.set_ydata(np.ma.array(x, mask=True))
-      return line,
-
-    ani = animation.FuncAnimation(fig, animate, np.arange(1, 20000), init_func=init,
-                                  interval=25, blit=True)
+    ax.set_xlim((0, np.max(hist[0]) + 3))
+    ax.set_ylim((0, np.max(hist[0]) + 3))
+    scat = ax.scatter([], [])
+    ani = animation.FuncAnimation(fig, update, frames=len(hist), interval=1000, blit=True)
     plt.show()
-
     pass
   #
 

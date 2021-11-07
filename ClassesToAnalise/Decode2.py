@@ -87,7 +87,6 @@ class Decode:
                 count = 0
                 process_time = self.process_times[operation_index]
 
-                # Todo for-each with index
                 for index in range( len(process_time) ):
                     if process_time[index] != -1:
                         count+=1
@@ -96,10 +95,6 @@ class Decode:
                         machines_matrix[i][j] = index+1
                         times_matrix[i][j]  = process_time[index]
                         break
-
-                # Todo Remove
-                #if count < machine_scheduling[operation_index]:
-                #    print("false")
 
                 operation_index+=1
 

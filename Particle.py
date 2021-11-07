@@ -11,9 +11,10 @@ class Particle:
     Inicia a entidade da particula
     Caso generate_random seja True, chama o preenchedor de valores aleatorios
     """
-    def __init__(self, solution_space_size, solution_space, decoder, generate_random = False):
+    def __init__(self, solution_space_size, solution_space, decoder, hyper_params, generate_random = False):
         self.position = None
         self.velocity = None
+        self.velocity_limit = hyper_params["velocity_limit"]
         #self.direction = None
         self.p_best = None
         self.p_best_fitness = None
@@ -44,7 +45,7 @@ class Particle:
         """ Se for '-1' vai criar um vetor de movimento para a traz """
         self.last_position = random_position + 1 if random.choice([True, False]) else random_position - 1
 
-        self.velocity = random.uniform(1.0, 2.0) # Todo - jogar no hyper parametro
+        self.velocity = random.uniform(1.0, self.velocity_limit)
 
         self.evaluate_value(solution_space, decoder)
         self.p_best = self.position
