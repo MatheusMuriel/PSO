@@ -45,7 +45,8 @@ class Particle:
         """ Se for '-1' vai criar um vetor de movimento para a traz """
         self.last_position = random_position + 1 if random.choice([True, False]) else random_position - 1
 
-        self.velocity = random.uniform(1.0, self.velocity_limit)
+        #self.velocity = random.uniform(0, self.velocity_limit)
+        self.velocity = 1
 
         self.evaluate_value(solution_space, decoder)
         self.p_best = self.position
@@ -65,14 +66,31 @@ class Particle:
         p_best_vector   = np.array([self.p_best[0],  self.p_best[1]  ])
         g_best_vector   = np.array([g_best[0],       g_best[1]       ])
 
-        median_best_vector = ((p_best_vector + g_best_vector)/2)
+        #median_best_vector = ((p_best_vector + g_best_vector)/2)
 
         innitial_position = np.array([x_position, y_position])
         inertia_vector = (innitial_position * velocity)
 
         """ Deduz a possição inicial para ele setar o calculo com base no zero do vetor """
         """ E então soma a innercia e obtem a posição final """
-        final_vector = (median_best_vector - innitial_position) + (inertia_vector /2)
+        #final_vector = (median_best_vector) + innitial_position
+        median_best_vector = ((p_best_vector + g_best_vector) / 2)
+        final_vector =  ((median_best_vector + innitial_position)) / 2
+        final_vector = final_vector + 0.9*random.random()
+        #final_vector = (final_vector + innitial_position) / 2
+        #final_vector = (final_vector + innitial_position) / 2
+        #final_vector = (final_vector + innitial_position) / 2
+
+        #if (final_vector[0] == innitial_position[0]) and (final_vector[1] == innitial_position[1]):
+            #final_vector = g_best_vector
+
+        """
+        print(f"Posição => {innitial_position}")
+        print(f"gBest => {g_best_vector}")
+        print(f"pBest => {p_best_vector}")
+        print(f"Movimento => {final_vector}")
+        print("---------------------")
+        """
 
         #print("Stop!")
 

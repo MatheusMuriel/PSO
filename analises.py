@@ -11,17 +11,30 @@ from PSO import PSO
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
-
 from matplotlib import animation
+
 """ Hyperparans for solutions """
 hyper_params = {
-  "coeficente_populacional": 5,
+  #Quantidade de particulas
   "population_size" : 30,
-  "velocity_limit" : 2.0
+  #Define o valor que vai multiplicar para gerar espaço de soluções
+  "coeficente_populacional": 2.0,
+  #Velocidade maxima de uma particula
+  "velocity_limit" : 0
 }
-IS_TESTE            = True
+
+""" Variaveis de controle """
+#file_path = './Data/1_Brandimarte/BrandimarteMk1.fjs'
+file_path = './Data/2_Kacem/Kacem3.fjs'
+interval_plot       = 200
+PLOT_SOLUTION_SPACE = True
 PLOT_3D             = True
-ANIMATED_POSITIONS  = True
+PLOT_POSITIONS      = False
+ANIMATED_POSITIONS  = False
+SAVE_POPULATION     = False
+SAVE_SOLUTION_SPACE = True
+
+""" Classe para formulação do problema de FJSP """
 class FJSP():
   """ Inicia o ambiente para os testes das diversas soluções """
   def __init__(self):
@@ -33,6 +46,7 @@ class FJSP():
     self.quant_of_machines = []
 
     self.solution_space_size = 0
+    self.solution_space_array_dimension = 0
     self.solution_space = None
 
     self.encode = None
@@ -40,6 +54,7 @@ class FJSP():
 
     self.coeficente_populacional = hyper_params["coeficente_populacional"]
     self.population_size         = hyper_params["population_size"]
+
     self.population = []
     self.g_best = None
     self.g_best_fitness = None
@@ -50,8 +65,8 @@ class FJSP():
   """ Inicia o ambiente para os testes das diversas soluções """
   def start_environment(self):
     """ Pega o arquivo com o problema """
-    #file_path = './Data/2_Kacem/Kacem4.fjs'
-    file_path = './Data/1_Brandimarte/BrandimarteMk1.fjs'
+    #file_path = './Data/2_Kacem/Kacem1.fjs'
+    #file_path = './Data/1_Brandimarte/BrandimarteMk1.fjs'
     input = Input(file_path)
     input_matrix_tuple = input.getMatrix()
 
@@ -67,15 +82,31 @@ class FJSP():
     self.quant_of_machines      = self.process_times.shape[1]
 
     """ Calcula o tamanho do espaço de soluçoes """
-    #self.solution_space_size = self.population_size ** 2
-    self.solution_space_size = 900
+    quantion_of_solutions = np.round(self.population_size ** self.coeficente_populacional)
+    """ Faz um round da raiz para pegar a raiz quadrada perfeita mais proxima """
+    self.solution_space_array_dimension = int(np.round(np.sqrt(quantion_of_solutions)))
+    self.solution_space_size = self.solution_space_array_dimension ** 2
+    print(f"Tamanho do espaço de soluções: {self.solution_space_size}")
 
     """ Inicia as classes de encode e decode para serem usados no problema """
     self.encode = Encode(self.solution_space_size,       self.process_times, self.quant_operations_per_jobs)
     self.decode = Decode(self.quant_operations_per_jobs, self.process_times)
 
+    self.save_encoder_data(self.decode)
+    self.save_decoder_data(self.decode)
+
     """ Inicia o espaço de soluções """
     self.solution_space = self.encode.initialize_solution_space()
+    np.save('solution_space.npy', self.solution_space)
+    #print("Solution gerado")
+
+    if SAVE_SOLUTION_SPACE:
+      self.save_solution_space(self.solution_space)
+    #
+
+    if PLOT_SOLUTION_SPACE:
+      self.plot_solution_space()
+    #
 
     """ Iniciar a população e define o g_best """
     for _ in range(self.population_size):
@@ -88,25 +119,32 @@ class FJSP():
       #
     #
 
-    if IS_TESTE:
-      self.plot_solution_space()
+    pass
   #
 
   """ Executa e salva os resultados dos varios algoritmos """
   def execute_algorithmns(self):
-    self.execute_direct_solution()
+    #self.execute_direct_solution()
+    pass
   #
 
   """ Teste com uma solução direta """
   def execute_direct_solution(self):
+    print("Start Calc")
     positions_history = []
-    for _ in range(0, 10):
+    g_best_count = 0
+
+    solutioned = False
+    #for _ in range(0, 20):
+    while not solutioned:
+      g_best_changed = False
+      #print(g_best_count)
       """ Salva a posição """
       positions = [p.position for p in self.population]
       positions.append(self.g_best)
-      print(self.g_best)
+      #print(self.g_best)
       positions_history.append(positions)
-
+      #print("::::::::::::::::::::::::::::::::::::")
       """ Percorre todas as particulas """
       for particula in self.population:
         """ Atualiza a posisão do particula """
@@ -119,15 +157,23 @@ class FJSP():
         if particula.fitness < self.g_best_fitness:
           self.g_best = particula.position
           self.g_best_fitness = particula.fitness
+          g_best_changed = True
         #
-
-        pass
+      #
+      if g_best_changed:
+        print("Changed!!")
+        print(g_best_count)
+        g_best_count = 0
+      else:
+        g_best_count += 1
       #
 
+      if g_best_count > 50:
+        solutioned = True
       pass
     #
 
-    if not PLOT_3D:
+    if PLOT_POSITIONS and (not PLOT_3D):
       for pos in positions_history:
         x_coordinates = [x[0] for x in pos]
         y_coordinates = [x[1] for x in pos]
@@ -135,11 +181,16 @@ class FJSP():
         plt.show()
     #
 
+    if SAVE_POPULATION:
+      self.save_population_history(positions_history)
+    #
+
+
     if ANIMATED_POSITIONS:
       self.animated_plot(positions_history)
     #
 
-    self.save_list(positions_history)
+    #self.save_list(positions_history)
     return positions_history
   #
 
@@ -152,8 +203,10 @@ class FJSP():
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
 
-    xx = np.arange(0, self.population_size)
-    yy = np.arange(0, self.population_size)
+    #self.solution_space_size
+
+    xx = np.arange(0, self.solution_space_array_dimension)
+    yy = np.arange(0, self.solution_space_array_dimension)
 
     X, Y = np.meshgrid(xx, yy)
     """ Make a list with fitness of all intens of solutions space """
@@ -165,29 +218,36 @@ class FJSP():
     plt.show()
   #
 
-  def animated_plot(self, hist):
+  def animated_plot(self, positions_history):
     import matplotlib;
     matplotlib.use("TkAgg")
+
     def update(i):
-      scat.set_offsets(hist[i])
+      scat.set_offsets(positions_history[i])
       scat.set_array(colors)
+      txt_title.set_text(f'Interação: {i + 1}')
       return scat,
-    colors = np.ones(len(hist[0]))
+
+    colors = np.ones(len(positions_history[0]))
     colors[len(colors) - 1] = 3
+
     fig, ax = plt.subplots()
-    ax.set_xlim((0, np.max(hist[0]) + 3))
-    ax.set_ylim((0, np.max(hist[0]) + 3))
+    ax.set_xlim((0, np.max(positions_history[0]) + 3))
+    ax.set_ylim((0, np.max(positions_history[0]) + 3))
     scat = ax.scatter([], [])
-    ani = animation.FuncAnimation(fig, update, frames=len(hist), interval=1000, blit=True)
+
+    txt_title = ax.set_title('')
+
+    ani = animation.FuncAnimation(fig, update, frames=len(positions_history), interval=interval_plot, blit=True)
     plt.show()
     pass
   #
 
-  def save_list(self, list_to_save):
+  def save_population_history(self, population_history):
     textfile = open("a_file.txt", "w")
 
-    textfile.write("positions_history = [")
-    for rodada in list_to_save:
+    textfile.write("positions_history = [\n")
+    for rodada in population_history:
       gbest=True
       textfile.write("[")
       for particula in rodada:
@@ -202,6 +262,43 @@ class FJSP():
     textfile.close()
     pass
   #
+
+  def save_solution_space(self, solution_space):
+    textfile = open("solution_space_file.txt", "w")
+
+    textfile.write("solution_space = [\n")
+    for linha in solution_space:
+      for solution in linha:
+        textfile.write("[")
+        for element in solution:
+          textfile.write(f"{element},")
+        textfile.write("],\n")
+    #
+    textfile.write("]")
+
+    textfile.close()
+    pass
+  #
+
+  def save_encoder_data(self, encoder):
+    #
+    pass
+  #
+
+  def save_decoder_data(self, decoder):
+    """
+      Salvar: quant_of_machines, quant_of_jobs, quant_operations_per_jobs,
+      max_of_operations, half_of_scheduling, process_times
+    """
+
+    textfile = open("executions_data/decoder_data.txt", "w")
+
+    textfile.write("solution_space = [\n")
+    textfile.write("]")
+
+    textfile.close()
+  #
+
 #
 
 if __name__ == '__main__':
