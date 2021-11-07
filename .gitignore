@@ -1,4 +1,7 @@
 
+# Saved data
+executions_data/*
+
 # Created by https://www.toptal.com/developers/gitignore/api/python,vim,visualstudiocode,linux,pycharm,jupyternotebooks
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,vim,visualstudiocode,linux,pycharm,jupyternotebooks
 

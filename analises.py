@@ -26,13 +26,17 @@ hyper_params = {
 """ Variaveis de controle """
 #file_path = './Data/1_Brandimarte/BrandimarteMk1.fjs'
 file_path = './Data/2_Kacem/Kacem3.fjs'
-interval_plot       = 200
-PLOT_SOLUTION_SPACE = True
-PLOT_3D             = True
+
+PLOT_SOLUTION_SPACE = False
+PLOT_3D             = False
 PLOT_POSITIONS      = False
-ANIMATED_POSITIONS  = False
-SAVE_POPULATION     = False
-SAVE_SOLUTION_SPACE = True
+ANIMATED_POSITIONS  = True
+interval_plot       = 200
+
+SAVE_POPULATION_HISTORY = True
+SAVE_SOLUTION_SPACE     = False
+SAVE_ENCODER            = False
+SAVE_DECODER            = False
 
 """ Classe para formulação do problema de FJSP """
 class FJSP():
@@ -92,14 +96,15 @@ class FJSP():
     self.encode = Encode(self.solution_space_size,       self.process_times, self.quant_operations_per_jobs)
     self.decode = Decode(self.quant_operations_per_jobs, self.process_times)
 
-    self.save_encoder_data(self.decode)
-    self.save_decoder_data(self.decode)
+    if SAVE_ENCODER:
+      self.save_encoder_data(self.encode)
+    #
+    if SAVE_DECODER:
+      self.save_decoder_data(self.decode)
+    #
 
     """ Inicia o espaço de soluções """
     self.solution_space = self.encode.initialize_solution_space()
-    np.save('solution_space.npy', self.solution_space)
-    #print("Solution gerado")
-
     if SAVE_SOLUTION_SPACE:
       self.save_solution_space(self.solution_space)
     #
@@ -124,7 +129,7 @@ class FJSP():
 
   """ Executa e salva os resultados dos varios algoritmos """
   def execute_algorithmns(self):
-    #self.execute_direct_solution()
+    self.execute_direct_solution()
     pass
   #
 
@@ -181,7 +186,7 @@ class FJSP():
         plt.show()
     #
 
-    if SAVE_POPULATION:
+    if SAVE_POPULATION_HISTORY:
       self.save_population_history(positions_history)
     #
 
@@ -225,7 +230,7 @@ class FJSP():
     def update(i):
       scat.set_offsets(positions_history[i])
       scat.set_array(colors)
-      txt_title.set_text(f'Interação: {i + 1}')
+      txt_title.set_text(f"Interação: {str(i)}")
       return scat,
 
     colors = np.ones(len(positions_history[0]))
@@ -235,75 +240,46 @@ class FJSP():
     ax.set_xlim((0, np.max(positions_history[0]) + 3))
     ax.set_ylim((0, np.max(positions_history[0]) + 3))
     scat = ax.scatter([], [])
-
-    txt_title = ax.set_title('')
-
-    ani = animation.FuncAnimation(fig, update, frames=len(positions_history), interval=interval_plot, blit=True)
+    txt_title = ax.set_title("Interação: 0")
+    ani = animation.FuncAnimation(fig, update, frames=len(positions_history), interval=interval_plot, blit=False)
     plt.show()
     pass
   #
 
   def save_population_history(self, population_history):
-    textfile = open("a_file.txt", "w")
-
-    textfile.write("positions_history = [\n")
-    for rodada in population_history:
-      gbest=True
-      textfile.write("[")
-      for particula in rodada:
-        textfile.write("[")
-        textfile.write(str(particula[0]) + "," + str(particula[1]))
-        textfile.write("],")
-      #
-      textfile.write("],\n")
-    #
-    textfile.write("]")
-
-    textfile.close()
-    pass
+    np.save('executions_data\particles_positions_history.npy', population_history)
   #
 
   def save_solution_space(self, solution_space):
-    textfile = open("solution_space_file.txt", "w")
-
-    textfile.write("solution_space = [\n")
-    for linha in solution_space:
-      for solution in linha:
-        textfile.write("[")
-        for element in solution:
-          textfile.write(f"{element},")
-        textfile.write("],\n")
-    #
-    textfile.write("]")
-
-    textfile.close()
-    pass
+    np.save('executions_data\solution_space.npy', solution_space)
   #
 
   def save_encoder_data(self, encoder):
+    np.save("executions_data/encoder_process_times.npy", encoder.process_times) # TODO adicionar numero de execução
     textfile = open("executions_data/encoder_data.txt", "w")
     textfile.write("encoder_data = {\n")
-    textfile.write(f"\"solution_space_size\"       : {encoder.solution_space_size},")
-    textfile.write(f"\"process_times\"             : {encoder.process_times},")
-    textfile.write(f"\"quant_operations_per_jobs\" : {encoder.quant_operations_per_jobs},")
-    textfile.write(f"\"quant_of_jobs\"             : {encoder.quant_of_jobs},")
-    textfile.write(f"\"quant_of_machines\"         : {encoder.quant_of_machines},")
-    textfile.write(f"\"half_of_scheduling\"        : {encoder.half_of_scheduling},")
-    textfile.write(f"\"solution_size\"             : {encoder.solution_size}")
+    textfile.write(f"\t\"solution_space_size\"       : {encoder.solution_space_size},\n")
+    textfile.write(f"\t\"quant_operations_per_jobs\" : {encoder.quant_operations_per_jobs},\n")
+    textfile.write(f"\t\"quant_of_jobs\"             : {encoder.quant_of_jobs},\n")
+    textfile.write(f"\t\"quant_of_machines\"         : {encoder.quant_of_machines},\n")
+    textfile.write(f"\t\"half_of_scheduling\"        : {encoder.half_of_scheduling},\n")
+    textfile.write(f"\t\"solution_size\"             : {encoder.solution_size},\n")
+    textfile.write(f"\t\"process_times\"             : np.load(\"encoder_process_times.npy\")\n")  # TODO adicionar numero de execução
     textfile.write("}")
     textfile.close()
     pass
   #
 
   def save_decoder_data(self, decoder):
+    np.save("executions_data/decoder_process_times.npy", decoder.process_times) # TODO adicionar numero de execução
     textfile = open("executions_data/decoder_data.txt", "w")
     textfile.write("decoder_data = {\n")
-    textfile.write(f"\"quant_of_jobs\":             {decoder.quant_of_jobs},")
-    textfile.write(f"\"quant_of_machines\":         {decoder.quant_of_machines},")
-    textfile.write(f"\"quant_operations_per_jobs\": {decoder.quant_operations_per_jobs},")
-    textfile.write(f"\"max_of_operations\":         {decoder.max_of_operations},")
-    textfile.write(f"\"half_of_scheduling\":        {decoder.half_of_scheduling},")
-    textfile.write(f"\"process_times\":             {decoder.process_times}")
+    textfile.write(f"\t\"quant_of_jobs\":             {decoder.quant_of_jobs},\n")
+    textfile.write(f"\t\"quant_of_machines\":         {decoder.quant_of_machines},\n")
+    textfile.write(f"\t\"quant_operations_per_jobs\": {decoder.quant_operations_per_jobs},\n")
+    textfile.write(f"\t\"max_of_operations\":         {decoder.max_of_operations},\n")
+    textfile.write(f"\t\"half_of_scheduling\":        {decoder.half_of_scheduling},\n")
+    textfile.write(f"\t\"process_times\":             np.load(\"decoder_process_times.npy\")\n") #TODO adicionar numero de execução
     textfile.write("}")
     textfile.close()
   #
