@@ -6,7 +6,7 @@ from Particle import Particle
 from ReadData import Input
 from Encode import Encode
 from ClassesToAnalise.Decode2 import Decode
-from PSO import PSO
+#from PSO import PSO
 
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 from mpl_toolkits.mplot3d import Axes3D
@@ -16,7 +16,7 @@ from matplotlib import animation
 """ Hyperparans for solutions """
 hyper_params = {
   #Quantidade de particulas
-  "population_size" : 30,
+  "population_size" : 100,
   #Define o valor que vai multiplicar para gerar espaço de soluções
   "coeficente_populacional": 2.0,
   #Velocidade maxima de uma particula
@@ -247,14 +247,22 @@ class FJSP():
   #
 
   def save_population_history(self, population_history):
-    np.save('executions_data\particles_positions_history.npy', population_history)
+    if not os.path.exists("executions_data"):
+      os.makedirs("executions_data")
+    np.save('executions_data/particles_positions_history.npy', population_history)
   #
 
   def save_solution_space(self, solution_space):
+    if not os.path.exists("executions_data"):
+      os.makedirs("executions_data")
     np.save('executions_data\solution_space.npy', solution_space)
   #
 
   def save_encoder_data(self, encoder):
+    if not os.path.exists("executions_data"):
+      os.makedirs("executions_data")
+    #
+
     np.save("executions_data/encoder_process_times.npy", encoder.process_times) # TODO adicionar numero de execução
     textfile = open("executions_data/encoder_data.txt", "w")
     textfile.write("encoder_data = {\n")
@@ -271,6 +279,10 @@ class FJSP():
   #
 
   def save_decoder_data(self, decoder):
+    if not os.path.exists("executions_data"):
+      os.makedirs("executions_data")
+    #
+
     np.save("executions_data/decoder_process_times.npy", decoder.process_times) # TODO adicionar numero de execução
     textfile = open("executions_data/decoder_data.txt", "w")
     textfile.write("decoder_data = {\n")
