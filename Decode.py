@@ -14,7 +14,11 @@ class Decode:
 
     #https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.barh.html
     def draw_gatt(self, start_time, end_time, fig):
-        colors = {0:'red', 1:'blue', 2:'yellow', 3:'orange', 4:'green'}
+        colors = { 0:'red', 1:'blue', 2:'yellow', 3:'orange', 
+            4:'green', 5:'palegoldenrod',6:'purple', 7:'pink', 
+            8:'Thistle', 9:'Magenta',10:'SlateBlue', 11:'RoyalBlue', 
+            12:'Cyan', 13:'Aqua',14:'floralwhite',15:'ghostwhite'
+        }
 
         #ax = fig.add_subplot(1, 2, 2)
         ax = plt.figure()

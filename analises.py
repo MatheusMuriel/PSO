@@ -17,7 +17,7 @@ from matplotlib import animation
 """ Hyperparans for solutions """
 hyper_params = {
   #Quantidade de particulas
-  "population_size" : 100,
+  "population_size" : 30,
   #Define o valor que vai multiplicar para gerar espaço de soluções
   "coeficente_populacional": 2.0,
   #Velocidade maxima de uma particula
@@ -31,13 +31,13 @@ file_path = './Data/2_Kacem/Kacem3.fjs'
 PLOT_SOLUTION_SPACE = False
 PLOT_3D             = False
 PLOT_POSITIONS      = False
-ANIMATED_POSITIONS  = True
+ANIMATED_POSITIONS  = False
 interval_plot       = 200
 
 SAVE_POPULATION_HISTORY = True
-SAVE_SOLUTION_SPACE     = False
-SAVE_ENCODER            = False
-SAVE_DECODER            = False
+SAVE_SOLUTION_SPACE     = True
+SAVE_ENCODER            = True
+SAVE_DECODER            = True
 
 """ Classe para formulação do problema de FJSP """
 class FJSP():
@@ -256,7 +256,7 @@ class FJSP():
   def save_solution_space(self, solution_space):
     if not os.path.exists("executions_data"):
       os.makedirs("executions_data")
-    np.save('executions_data\solution_space.npy', solution_space)
+    np.save('executions_data/solution_space.npy', solution_space)
   #
 
   def save_encoder_data(self, encoder):
@@ -295,6 +295,14 @@ class FJSP():
     textfile.write(f"\t\"process_times\":             np.load(\"decoder_process_times.npy\")\n") #TODO adicionar numero de execução
     textfile.write("}")
     textfile.close()
+  #
+
+  def save_population(self, population):
+    if not os.path.exists(self.path_to_save):
+      os.makedirs(self.path_to_save)
+    #
+
+    np.save(f'{self.path_to_save}/population.npy', solution_space)
   #
 
 #
