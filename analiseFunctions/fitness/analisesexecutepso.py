@@ -12,18 +12,21 @@ ft_p1_c5_a1 = fitness[f"problem_{1}"][f"coef_{5}"][f"approach_{1}"]
 ft_p1_c5_a2 = fitness[f"problem_{1}"][f"coef_{5}"][f"approach_{2}"]
 ft_p1_c6_a1 = fitness[f"problem_{1}"][f"coef_{6}"][f"approach_{1}"]
 ft_p1_c6_a2 = fitness[f"problem_{1}"][f"coef_{6}"][f"approach_{2}"]
+
 ft_p2_c3_a1 = fitness[f"problem_{2}"][f"coef_{3}"][f"approach_{1}"]
 ft_p2_c3_a2 = fitness[f"problem_{2}"][f"coef_{3}"][f"approach_{2}"]
 ft_p2_c5_a1 = fitness[f"problem_{2}"][f"coef_{5}"][f"approach_{1}"]
 ft_p2_c5_a2 = fitness[f"problem_{2}"][f"coef_{5}"][f"approach_{2}"]
 ft_p2_c6_a1 = fitness[f"problem_{2}"][f"coef_{6}"][f"approach_{1}"]
 ft_p2_c6_a2 = fitness[f"problem_{2}"][f"coef_{6}"][f"approach_{2}"]
+
 ft_p3_c3_a1 = fitness[f"problem_{3}"][f"coef_{3}"][f"approach_{1}"]
 ft_p3_c3_a2 = fitness[f"problem_{3}"][f"coef_{3}"][f"approach_{2}"]
 ft_p3_c5_a1 = fitness[f"problem_{3}"][f"coef_{5}"][f"approach_{1}"]
 ft_p3_c5_a2 = fitness[f"problem_{3}"][f"coef_{5}"][f"approach_{2}"]
 ft_p3_c6_a1 = fitness[f"problem_{3}"][f"coef_{6}"][f"approach_{1}"]
 ft_p3_c6_a2 = fitness[f"problem_{3}"][f"coef_{6}"][f"approach_{2}"]
+
 ft_p4_c3_a1 = fitness[f"problem_{4}"][f"coef_{3}"][f"approach_{1}"]
 ft_p4_c3_a2 = fitness[f"problem_{4}"][f"coef_{3}"][f"approach_{2}"]
 ft_p4_c5_a1 = fitness[f"problem_{4}"][f"coef_{5}"][f"approach_{1}"]
@@ -153,7 +156,7 @@ def plot_fitness_analise():
 
 """## Função de Plot"""
 #https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html
-def plot_fitness_analise():
+def plot_fitness_analise_problema1():
   fig = plt.figure(figsize=figsize)
   ax = fig.subplots(nrows=1, ncols=3)
 
@@ -182,8 +185,11 @@ def plot_fitness_analise():
   ######################################
   plt.show()
   ######################################
+"""#..."""
 
-
+"""## Função de Plot"""
+#https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html
+def plot_fitness_analise_problema2():
   fig = plt.figure(figsize=figsize)
   ax = fig.subplots(nrows=1, ncols=3)
   fig.suptitle("Problema 2")
@@ -203,64 +209,6 @@ def plot_fitness_analise():
   ax[2].title.set_text("90x90")
   ax[2].hist(ft_p2_c6_a1, bins=limits_p2, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
   ax[2].hist(ft_p2_c6_a2, bins=limits_p2, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[2].set_xlabel('Makespan')
-  ax[2].set_ylabel('Frequência')
-  ax[2].legend(loc='upper right')
-  ######################################
-  plt.show()
-  ######################################
-
-  
-  fig = plt.figure(figsize=figsize)
-  ax = fig.subplots(nrows=1, ncols=3)
-  fig.suptitle("Problema 3")
-  ######################################
-  ax[0].title.set_text("50x50")
-  ax[0].hist(ft_p3_c3_a1, bins=limits_p3, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[0].hist(ft_p3_c3_a2, bins=limits_p3, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[0].set_xlabel('Makespan')
-  ax[0].set_ylabel('Frequência')
-  ax[0].legend(loc='upper right')
-
-  ax[1].title.set_text("70x70")
-  ax[1].hist(ft_p3_c5_a1, bins=limits_p3, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[1].hist(ft_p3_c5_a2, bins=limits_p3, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[1].set_xlabel('Makespan')
-  ax[1].set_ylabel('Frequência')
-  ax[1].legend(loc='upper right')
-
-  ax[2].title.set_text("90x90")
-  ax[2].hist(ft_p3_c6_a1, bins=limits_p3, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[2].hist(ft_p3_c6_a2, bins=limits_p3, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[2].set_xlabel('Makespan')
-  ax[2].set_ylabel('Frequência')
-  ax[2].legend(loc='upper right')
-  ######################################
-  plt.show()
-  ######################################
-
-
-  fig = plt.figure(figsize=figsize)
-  ax = fig.subplots(nrows=1, ncols=3)
-  fig.suptitle("Problema 4")
-  ######################################
-  ax[0].title.set_text("50x50")
-  ax[0].hist(ft_p4_c3_a1, bins=limits_p4, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[0].hist(ft_p4_c3_a2, bins=limits_p4, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[0].set_xlabel('Makespan')
-  ax[0].set_ylabel('Frequência')
-  ax[0].legend(loc='upper right')
-
-  ax[1].title.set_text("70x70")
-  ax[1].hist(ft_p4_c5_a1, bins=limits_p4, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[1].hist(ft_p4_c5_a2, bins=limits_p4, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[1].set_xlabel('Makespan')
-  ax[1].set_ylabel('Frequência')
-  ax[1].legend(loc='upper right')
-
-  ax[2].title.set_text("90x90")
-  ax[2].hist(ft_p4_c6_a1, bins=limits_p4, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[2].hist(ft_p4_c6_a2, bins=limits_p4, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
   ax[2].set_xlabel('Makespan')
   ax[2].set_ylabel('Frequência')
   ax[2].legend(loc='upper right')
@@ -270,64 +218,7 @@ def plot_fitness_analise():
 
 """## Função de Plot"""
 #https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html
-def plot_fitness_analise():
-  fig = plt.figure(figsize=figsize)
-  ax = fig.subplots(nrows=1, ncols=3)
-
-  fig.suptitle("Problema 1")
-  ######################################
-  ax[0].title.set_text("50x50")
-  ax[0].hist(ft_p1_c3_a1, bins=limits_p1, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[0].hist(ft_p1_c3_a2, bins=limits_p1, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[0].set_xlabel('Makespan')
-  ax[0].set_ylabel('Frequência')
-  ax[0].legend(loc='upper right')
-
-  ax[1].title.set_text("70x70")
-  ax[1].hist(ft_p1_c5_a1, bins=limits_p1, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[1].hist(ft_p1_c5_a2, bins=limits_p1, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[1].set_xlabel('Makespan')
-  ax[1].set_ylabel('Frequência')
-  ax[1].legend(loc='upper right')
-
-  ax[2].title.set_text("90x90")
-  ax[2].hist(ft_p1_c6_a1, bins=limits_p1, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[2].hist(ft_p1_c6_a2, bins=limits_p1, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[2].set_xlabel('Makespan')
-  ax[2].set_ylabel('Frequência')
-  ax[2].legend(loc='upper right')
-  ######################################
-  plt.show()
-  ######################################
-
-
-  fig = plt.figure(figsize=figsize)
-  ax = fig.subplots(nrows=1, ncols=3)
-  fig.suptitle("Problema 2")
-  ######################################
-  ax[0].title.set_text("50x50")
-  ax[0].hist(ft_p2_c3_a1, bins=limits_p2, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[0].hist(ft_p2_c3_a2, bins=limits_p2, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[0].set_xlabel('Makespan')
-  ax[0].set_ylabel('Frequência')
-  ax[0].legend(loc='upper right')
-
-  ax[1].title.set_text("70x70")
-  ax[1].hist(ft_p2_c5_a1, bins=limits_p2, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[1].hist(ft_p2_c5_a2, bins=limits_p2, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[1].legend(loc='upper right')
-
-  ax[2].title.set_text("90x90")
-  ax[2].hist(ft_p2_c6_a1, bins=limits_p2, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[2].hist(ft_p2_c6_a2, bins=limits_p2, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[2].set_xlabel('Makespan')
-  ax[2].set_ylabel('Frequência')
-  ax[2].legend(loc='upper right')
-  ######################################
-  plt.show()
-  ######################################
-
-  
+def plot_fitness_analise_problema3():
   fig = plt.figure(figsize=figsize)
   ax = fig.subplots(nrows=1, ncols=3)
   fig.suptitle("Problema 3")
@@ -349,35 +240,6 @@ def plot_fitness_analise():
   ax[2].title.set_text("90x90")
   ax[2].hist(ft_p3_c6_a1, bins=limits_p3, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
   ax[2].hist(ft_p3_c6_a2, bins=limits_p3, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[2].set_xlabel('Makespan')
-  ax[2].set_ylabel('Frequência')
-  ax[2].legend(loc='upper right')
-  ######################################
-  plt.show()
-  ######################################
-
-
-  fig = plt.figure(figsize=figsize)
-  ax = fig.subplots(nrows=1, ncols=3)
-  fig.suptitle("Problema 4")
-  ######################################
-  ax[0].title.set_text("50x50")
-  ax[0].hist(ft_p4_c3_a1, bins=limits_p4, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[0].hist(ft_p4_c3_a2, bins=limits_p4, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[0].set_xlabel('Makespan')
-  ax[0].set_ylabel('Frequência')
-  ax[0].legend(loc='upper right')
-
-  ax[1].title.set_text("70x70")
-  ax[1].hist(ft_p4_c5_a1, bins=limits_p4, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[1].hist(ft_p4_c5_a2, bins=limits_p4, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[1].set_xlabel('Makespan')
-  ax[1].set_ylabel('Frequência')
-  ax[1].legend(loc='upper right')
-
-  ax[2].title.set_text("90x90")
-  ax[2].hist(ft_p4_c6_a1, bins=limits_p4, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[2].hist(ft_p4_c6_a2, bins=limits_p4, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
   ax[2].set_xlabel('Makespan')
   ax[2].set_ylabel('Frequência')
   ax[2].legend(loc='upper right')
@@ -387,210 +249,7 @@ def plot_fitness_analise():
 
 """## Função de Plot"""
 #https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html
-def plot_fitness_analise():
-  fig = plt.figure(figsize=figsize)
-  ax = fig.subplots(nrows=1, ncols=3)
-
-  fig.suptitle("Problema 1")
-  ######################################
-  ax[0].title.set_text("50x50")
-  ax[0].hist(ft_p1_c3_a1, bins=limits_p1, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[0].hist(ft_p1_c3_a2, bins=limits_p1, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[0].set_xlabel('Makespan')
-  ax[0].set_ylabel('Frequência')
-  ax[0].legend(loc='upper right')
-
-  ax[1].title.set_text("70x70")
-  ax[1].hist(ft_p1_c5_a1, bins=limits_p1, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[1].hist(ft_p1_c5_a2, bins=limits_p1, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[1].set_xlabel('Makespan')
-  ax[1].set_ylabel('Frequência')
-  ax[1].legend(loc='upper right')
-
-  ax[2].title.set_text("90x90")
-  ax[2].hist(ft_p1_c6_a1, bins=limits_p1, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[2].hist(ft_p1_c6_a2, bins=limits_p1, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[2].set_xlabel('Makespan')
-  ax[2].set_ylabel('Frequência')
-  ax[2].legend(loc='upper right')
-  ######################################
-  plt.show()
-  ######################################
-
-
-  fig = plt.figure(figsize=figsize)
-  ax = fig.subplots(nrows=1, ncols=3)
-  fig.suptitle("Problema 2")
-  ######################################
-  ax[0].title.set_text("50x50")
-  ax[0].hist(ft_p2_c3_a1, bins=limits_p2, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[0].hist(ft_p2_c3_a2, bins=limits_p2, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[0].set_xlabel('Makespan')
-  ax[0].set_ylabel('Frequência')
-  ax[0].legend(loc='upper right')
-
-  ax[1].title.set_text("70x70")
-  ax[1].hist(ft_p2_c5_a1, bins=limits_p2, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[1].hist(ft_p2_c5_a2, bins=limits_p2, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[1].legend(loc='upper right')
-
-  ax[2].title.set_text("90x90")
-  ax[2].hist(ft_p2_c6_a1, bins=limits_p2, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[2].hist(ft_p2_c6_a2, bins=limits_p2, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[2].set_xlabel('Makespan')
-  ax[2].set_ylabel('Frequência')
-  ax[2].legend(loc='upper right')
-  ######################################
-  plt.show()
-  ######################################
-
-  
-  fig = plt.figure(figsize=figsize)
-  ax = fig.subplots(nrows=1, ncols=3)
-  fig.suptitle("Problema 3")
-  ######################################
-  ax[0].title.set_text("50x50")
-  ax[0].hist(ft_p3_c3_a1, bins=limits_p3, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[0].hist(ft_p3_c3_a2, bins=limits_p3, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[0].set_xlabel('Makespan')
-  ax[0].set_ylabel('Frequência')
-  ax[0].legend(loc='upper right')
-
-  ax[1].title.set_text("70x70")
-  ax[1].hist(ft_p3_c5_a1, bins=limits_p3, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[1].hist(ft_p3_c5_a2, bins=limits_p3, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[1].set_xlabel('Makespan')
-  ax[1].set_ylabel('Frequência')
-  ax[1].legend(loc='upper right')
-
-  ax[2].title.set_text("90x90")
-  ax[2].hist(ft_p3_c6_a1, bins=limits_p3, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[2].hist(ft_p3_c6_a2, bins=limits_p3, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[2].set_xlabel('Makespan')
-  ax[2].set_ylabel('Frequência')
-  ax[2].legend(loc='upper right')
-  ######################################
-  plt.show()
-  ######################################
-
-
-  fig = plt.figure(figsize=figsize)
-  ax = fig.subplots(nrows=1, ncols=3)
-  fig.suptitle("Problema 4")
-  ######################################
-  ax[0].title.set_text("50x50")
-  ax[0].hist(ft_p4_c3_a1, bins=limits_p4, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[0].hist(ft_p4_c3_a2, bins=limits_p4, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[0].set_xlabel('Makespan')
-  ax[0].set_ylabel('Frequência')
-  ax[0].legend(loc='upper right')
-
-  ax[1].title.set_text("70x70")
-  ax[1].hist(ft_p4_c5_a1, bins=limits_p4, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[1].hist(ft_p4_c5_a2, bins=limits_p4, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[1].set_xlabel('Makespan')
-  ax[1].set_ylabel('Frequência')
-  ax[1].legend(loc='upper right')
-
-  ax[2].title.set_text("90x90")
-  ax[2].hist(ft_p4_c6_a1, bins=limits_p4, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[2].hist(ft_p4_c6_a2, bins=limits_p4, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[2].set_xlabel('Makespan')
-  ax[2].set_ylabel('Frequência')
-  ax[2].legend(loc='upper right')
-  ######################################
-  plt.show()
-"""#..."""
-
-"""## Função de Plot"""
-#https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html
-def plot_fitness_analise():
-  fig = plt.figure(figsize=figsize)
-  ax = fig.subplots(nrows=1, ncols=3)
-
-  fig.suptitle("Problema 1")
-  ######################################
-  ax[0].title.set_text("50x50")
-  ax[0].hist(ft_p1_c3_a1, bins=limits_p1, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[0].hist(ft_p1_c3_a2, bins=limits_p1, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[0].set_xlabel('Makespan')
-  ax[0].set_ylabel('Frequência')
-  ax[0].legend(loc='upper right')
-
-  ax[1].title.set_text("70x70")
-  ax[1].hist(ft_p1_c5_a1, bins=limits_p1, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[1].hist(ft_p1_c5_a2, bins=limits_p1, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[1].set_xlabel('Makespan')
-  ax[1].set_ylabel('Frequência')
-  ax[1].legend(loc='upper right')
-
-  ax[2].title.set_text("90x90")
-  ax[2].hist(ft_p1_c6_a1, bins=limits_p1, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[2].hist(ft_p1_c6_a2, bins=limits_p1, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[2].set_xlabel('Makespan')
-  ax[2].set_ylabel('Frequência')
-  ax[2].legend(loc='upper right')
-  ######################################
-  plt.show()
-  ######################################
-
-
-  fig = plt.figure(figsize=figsize)
-  ax = fig.subplots(nrows=1, ncols=3)
-  fig.suptitle("Problema 2")
-  ######################################
-  ax[0].title.set_text("50x50")
-  ax[0].hist(ft_p2_c3_a1, bins=limits_p2, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[0].hist(ft_p2_c3_a2, bins=limits_p2, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[0].set_xlabel('Makespan')
-  ax[0].set_ylabel('Frequência')
-  ax[0].legend(loc='upper right')
-
-  ax[1].title.set_text("70x70")
-  ax[1].hist(ft_p2_c5_a1, bins=limits_p2, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[1].hist(ft_p2_c5_a2, bins=limits_p2, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[1].legend(loc='upper right')
-
-  ax[2].title.set_text("90x90")
-  ax[2].hist(ft_p2_c6_a1, bins=limits_p2, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[2].hist(ft_p2_c6_a2, bins=limits_p2, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[2].set_xlabel('Makespan')
-  ax[2].set_ylabel('Frequência')
-  ax[2].legend(loc='upper right')
-  ######################################
-  plt.show()
-  ######################################
-
-  
-  fig = plt.figure(figsize=figsize)
-  ax = fig.subplots(nrows=1, ncols=3)
-  fig.suptitle("Problema 3")
-  ######################################
-  ax[0].title.set_text("50x50")
-  ax[0].hist(ft_p3_c3_a1, bins=limits_p3, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[0].hist(ft_p3_c3_a2, bins=limits_p3, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[0].set_xlabel('Makespan')
-  ax[0].set_ylabel('Frequência')
-  ax[0].legend(loc='upper right')
-
-  ax[1].title.set_text("70x70")
-  ax[1].hist(ft_p3_c5_a1, bins=limits_p3, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[1].hist(ft_p3_c5_a2, bins=limits_p3, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[1].set_xlabel('Makespan')
-  ax[1].set_ylabel('Frequência')
-  ax[1].legend(loc='upper right')
-
-  ax[2].title.set_text("90x90")
-  ax[2].hist(ft_p3_c6_a1, bins=limits_p3, alpha=alpha_back,  color=color_back,  rwidth=largura_bar_back,  label=label_back)
-  ax[2].hist(ft_p3_c6_a2, bins=limits_p3, alpha=alpha_front, color=color_front, rwidth=largura_bar_front, label=label_front, edgecolor=edgecolor_front)
-  ax[2].set_xlabel('Makespan')
-  ax[2].set_ylabel('Frequência')
-  ax[2].legend(loc='upper right')
-  ######################################
-  plt.show()
-  ######################################
-
-
+def plot_fitness_analise_problema4():
   fig = plt.figure(figsize=figsize)
   ax = fig.subplots(nrows=1, ncols=3)
   fig.suptitle("Problema 4")
