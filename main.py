@@ -51,7 +51,7 @@ class FJSP():
     """ Inicia o ambiente para os testes das diversas soluções """
     def start_environment(self):
         """ Pega o arquivo com o problema """
-        file_path = './Data/2_Kacem/Kacem1.fjs'
+        file_path = './Data/Kacem1.fjs'
         input = Input(file_path)
         input_matrix_tuple = input.getMatrix()
 
@@ -67,8 +67,8 @@ class FJSP():
         self.quant_of_machines      = self.process_times.shape[1]
 
         """ Calcula o tamanho do espaço de soluçoes """
-        #self.solution_space_size = self.population_size ** 2
-        self.solution_space_size = 900
+        self.solution_space_size = self.population_size ** 2
+        #self.solution_space_size = 900
 
         """ Inicia as classes de encode e decode para serem usados no problema """
         self.encode = Encode(self.solution_space_size,       self.process_times, self.quant_operations_per_jobs)
@@ -186,24 +186,7 @@ class FJSP():
 #
 
 if __name__ == '__main__':
-    print("Start...")
-
     FJSP = FJSP()
     FJSP.execute_algorithmns()
     FJSP.finalize_plot()
-
-    """interations = 1
-    for i in range(interations):
-        results = [FJSP]
-
-        fitness_list = [result[1] for result in results]
-        best_fitness_index = np.argmax(np.array(fitness_list))
-
-        scheduling_list = [result[0] for result in results]
-        scheduling = scheduling_list[best_fitness_index]
-
-        Decode.decode(scheduling, plot_scheduling=True)
-    ###"""
-
-    print("Fim...")
 #
