@@ -6,16 +6,12 @@ import random
 Classe que representa e gerencia a entidade de uma particula
 """
 class Particle:
-
     """
-    Inicia a entidade da particula
-    Caso generate_random seja True, chama o preenchedor de valores aleatorios
+    Inicia a entidade da particula e chama o preenchedor de valores aleatorios
     """
-    def __init__(self, solution_space_size, solution_space, decoder, hyper_params, generate_random = False):
+    def __init__(self, solution_space_size, solution_space, decoder, hyper_params):
         self.position = None
         self.velocity = None
-        self.velocity_limit = hyper_params["velocity_limit"]
-        #self.direction = None
         self.p_best = None
         self.p_best_fitness = None
         self.value = None
@@ -23,20 +19,19 @@ class Particle:
         self.last_position = None
         self.solution_space_size = solution_space_size
         self.solution_space_limit = solution_space.shape[0]
+        self.velocity_limit = hyper_params["velocity_limit"]
 
-        if generate_random:
-            self.fill_with_random_values(self.solution_space_limit, solution_space, decoder)
+        self.fill_with_random_values(self.solution_space_limit, solution_space, decoder)
     #
 
     """
     Preenche a particula com valores aleatorios
     """
     def fill_with_random_values(self, solution_space_limit, solution_space, decoder):
-        """ ... """
-
-        """ Começa em 1 e deduz 1 do limite """
-        """ para ele não ir parar nas bordas e não conseguir movimentar """
+        """ Começa em 1 e deduz 1 do limite
+        para ele não ir parar nas bordas e não conseguir movimentar """
         random_position = np.array(random.sample(range(1, solution_space_limit - 1), 2))
+
         """ Converte de array para list para manter o padrão de datatype da solução """
         self.position = [int(random_position[0]), int(random_position[1])]
 
@@ -45,10 +40,13 @@ class Particle:
         """ Se for '-1' vai criar um vetor de movimento para a traz """
         self.last_position = random_position + 1 if random.choice([True, False]) else random_position - 1
 
-        #self.velocity = random.uniform(0, self.velocity_limit)
-        self.velocity = 1
+        """ Sorteia uma velocidade aleatoria """
+        self.velocity = random.uniform(0, self.velocity_limit)
 
+        """ Calcula a qualidade da possição """
         self.evaluate_value(solution_space, decoder)
+
+        """ Define a posição sorteada como pBest inicial """
         self.p_best = self.position
     #
 
@@ -56,85 +54,69 @@ class Particle:
     Atualiza a posição, velocidade e inercia da particula.
     Chamado pela iteração do PSO
     """
-    def update_position(self, g_best, g_best_count):
-        x_position = self.position[0]
-        y_position = self.position[1]
-        velocity = self.velocity
-
-        #print("Stop!")
-
+    def update_position(self, g_best, g_best_count, approach):
         p_best_vector   = np.array([self.p_best[0],  self.p_best[1]  ])
         g_best_vector   = np.array([g_best[0],       g_best[1]       ])
 
-        #median_best_vector = ((p_best_vector + g_best_vector)/2)
+        """ Posição atual da particula """
+        innitial_position   = np.array([self.position[0], self.position[1]])
 
-        innitial_position   = np.array([x_position, y_position])
-        inertia_vector      = (innitial_position * velocity)
+        """ Calcula a inercia da particula """
+        inertia_vector      = np.array(innitial_position + self.velocity)
 
-        """ Deduz a possição inicial para ele setar o calculo com base no zero do vetor """
-        """ E então soma a innercia e obtem a posição final """
-        #final_vector = (median_best_vector) + innitial_position
+        """ Calcula a media entre os vetores """
         median_best_vector = ((p_best_vector + g_best_vector) / 2)
-        final_vector =  ((median_best_vector + innitial_position)) / 2
-        if g_best_count > 5:
-            final_vector = final_vector + 0.9*('inertia_vector'*random.random()) # Inercia com importancia aleatoria
-        else:
-            final_vector = final_vector + 0.9*random.random() # Fator aleatorio
-
-        #final_vector = final_vector + 0.9                   # Movimento fixo
-
         
-        #final_vector = (final_vector + innitial_position) / 2
-        #final_vector = (final_vector + innitial_position) / 2
-        #final_vector = (final_vector + innitial_position) / 2
-
-        #if (final_vector[0] == innitial_position[0]) and (final_vector[1] == innitial_position[1]):
-            #final_vector = g_best_vector
-
-        """
-        print(f"Posição => {innitial_position}")
-        print(f"gBest => {g_best_vector}")
-        print(f"pBest => {p_best_vector}")
-        print(f"Movimento => {final_vector}")
-        print("---------------------")
-        """
-
-        #print("Stop!")
+        """ Soma a possição inicial para a movimentação ser com base no na posição atual """
+        final_vector =  ((median_best_vector + innitial_position)) / 2
+        
+        if approach == 1:
+            """ Abordagem padrão """
+            final_vector = final_vector + (self.velocity_limit * random.random())
+        elif approach == 2:
+            """ Abordagem dinâmica """
+            if g_best_count > 5:
+                final_vector = final_vector + (self.velocity_limit * (inertia_vector * random.random()))
+            else:
+                final_vector = final_vector + (self.velocity_limit * random.random())
+            #
+        #
 
         if final_vector is not None:
-            new_x_position = final_vector[0]
-            new_y_position = final_vector[1]
-
-            """ Validações para caso seja numero negativo (tenha ido para fora do mapa) """
-            if new_x_position < 0:
-                new_x_position = 0
+            """ Zera caso seja um numero negativo (tenha ido para fora do mapa) """
+            if final_vector[0] < 0:
+                final_vector[0] = 0
             #
-            if new_y_position < 0:
-                new_y_position = 0
+            if final_vector[1] < 0:
+                final_vector[1] = 0
             #
 
-            """ Validação para caso seja maior que o limite matrix (tenha ido para fora do mapa) """
-            if new_x_position >= self.solution_space_limit:
-                new_x_position = self.solution_space_limit - 1
+            """ Tratativa para caso seja maior que o limite da matriz (tenha ido para fora do mapa) """
+            if final_vector[0] >= self.solution_space_limit:
+                final_vector[0] = self.solution_space_limit - 1
             #
-            if new_y_position >= self.solution_space_limit:
-                new_y_position = self.solution_space_limit - 1
+            if final_vector[1] >= self.solution_space_limit:
+                final_vector[1] = self.solution_space_limit - 1
             #
 
-            self.position = [int(new_x_position), int(new_y_position)]
-
-        pass
+            """ Define a posição da particula"""
+            self.position = [int(final_vector[0]), int(final_vector[1])]
+        #
     #
 
     """
     Calcula e atualiza os valores de posição, fitness e p_best da particula 
     """
     def evaluate_value(self, solution_space, decoder):
+        """ Pega no espaço de soluções a solução da posição atual da particula """
         self.value = solution_space[self.position[0], self.position[1]]
-        fitness = decoder.decode(self.value)
-        self.fitness = fitness
 
+        """ Calcula o fitness da posição atual """
+        self.fitness = decoder.decode(self.value)
+
+        """ Caso seja melhor atualiza o pBest """
         if (self.p_best_fitness is None) or (fitness < self.p_best_fitness):
             self.p_best_fitness = fitness
             self.p_best = self.position
+        #
     #

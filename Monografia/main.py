@@ -79,7 +79,7 @@ class FJSP():
 
         """ Iniciar a população e define o g_best """
         for _ in range(self.population_size):
-            particle = Particle(self.solution_space_size, self.solution_space, self.decode, generate_random=True)
+            particle = Particle(self.solution_space_size, self.solution_space, self.decode)
             self.population.append(particle)
 
             if (self.g_best_fitness is None) or (particle.fitness < self.g_best_fitness):
