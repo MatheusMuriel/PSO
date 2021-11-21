@@ -96,7 +96,6 @@ class Encode:
                 np.delete(jobs_list, job_num)
             #
 
-            #print()
         #
 
         solution_space = np.hstack((machines_scheduling, operations_scheduling))
