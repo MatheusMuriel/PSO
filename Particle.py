@@ -1,4 +1,4 @@
-import Decode as Decode
+#import Decode
 import numpy as np
 import random
 
@@ -56,50 +56,34 @@ class Particle:
     Atualiza a posição, velocidade e inercia da particula.
     Chamado pela iteração do PSO
     """
-    def update_position(self, g_best, g_best_count):
+    def update_position(self, g_best, g_best_count, aprout):
         x_position = self.position[0]
         y_position = self.position[1]
         velocity = self.velocity
 
-        #print("Stop!")
-
         p_best_vector   = np.array([self.p_best[0],  self.p_best[1]  ])
         g_best_vector   = np.array([g_best[0],       g_best[1]       ])
-
-        #median_best_vector = ((p_best_vector + g_best_vector)/2)
 
         innitial_position   = np.array([x_position, y_position])
         inertia_vector      = (innitial_position * velocity)
 
         """ Deduz a possição inicial para ele setar o calculo com base no zero do vetor """
         """ E então soma a innercia e obtem a posição final """
-        #final_vector = (median_best_vector) + innitial_position
         median_best_vector = ((p_best_vector + g_best_vector) / 2)
         final_vector =  ((median_best_vector + innitial_position)) / 2
-        if g_best_count > 5:
-            final_vector = final_vector + 0.9*('inertia_vector'*random.random()) # Inercia com importancia aleatoria
+
+        if aprout == 1:
+            """ Fator aleatorio """
+            final_vector = final_vector + 0.9*random.random()
         else:
-            final_vector = final_vector + 0.9*random.random() # Fator aleatorio
-
-        #final_vector = final_vector + 0.9                   # Movimento fixo
-
-        
-        #final_vector = (final_vector + innitial_position) / 2
-        #final_vector = (final_vector + innitial_position) / 2
-        #final_vector = (final_vector + innitial_position) / 2
-
-        #if (final_vector[0] == innitial_position[0]) and (final_vector[1] == innitial_position[1]):
-            #final_vector = g_best_vector
-
-        """
-        print(f"Posição => {innitial_position}")
-        print(f"gBest => {g_best_vector}")
-        print(f"pBest => {p_best_vector}")
-        print(f"Movimento => {final_vector}")
-        print("---------------------")
-        """
-
-        #print("Stop!")
+            if g_best_count > 5:
+                """ Inercia com importancia aleatoria """
+                final_vector = final_vector + 0.9*(inertia_vector*random.random())
+            else:
+                """ Fator aleatorio """
+                final_vector = final_vector + 0.9*random.random()
+            #
+        #
 
         if final_vector is not None:
             new_x_position = final_vector[0]
